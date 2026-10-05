@@ -5,7 +5,8 @@ import { ebooks } from '../data/ebooks'
 import { filter } from '../data/filter'
 
 const q = ref('')
-const covers = ebooks.slice(0, 3)
+const covers = ebooks.slice(14, 17)
+console.log(covers)
 const pos = [
   { left: '2%', top: '14%', transform: 'rotate(-9deg)' },
   { left: '27%', top: '0%', transform: 'rotate(1deg)', zIndex: 2 },
@@ -26,13 +27,19 @@ function cari() {
 
     <div class="relative mx-auto grid max-w-6xl items-center gap-10 px-5 pb-24 pt-14 sm:px-6 md:grid-cols-[1.1fr_1fr] md:pb-28 md:pt-20">
       <div class="animate-fade-up">
-        <p class="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-amber-300">Perpustakaan Digital</p>
-        <h1 class="font-display text-4xl font-bold leading-[1.1] sm:text-5xl lg:text-6xl">
-          Baca apa saja,<br /><span class="text-amber-300">kapan saja.</span>
-        </h1>
-        <p class="mt-4 max-w-md text-base text-emerald-100/85">
-          Ebook SMKN Campalagian. Gratis, tanpa login.
-        </p>
+        <p class="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-amber-300">Gerakan Sulbar Madarras (GSM)</p>
+       <div class="flex items-center gap-3 sm:gap-4">
+  <img
+    src="/favicon.png"
+    alt="Logo SMKN Campalagian"
+    class="h-12 w-12 object-contain sm:h-16 sm:w-16"
+  />
+
+  <h1 class="font-display text-2xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+    SMKN CAMPALAGIAN
+  </h1>
+</div>
+       
 
         <form class="mt-8 flex max-w-lg overflow-hidden rounded-2xl bg-white p-1.5 shadow-2xl" @submit.prevent="cari">
           <input
@@ -46,15 +53,16 @@ function cari() {
       </div>
 
       <!-- Sampul buku bertumpuk -->
-      <div class="relative mx-auto hidden h-[26rem] w-full max-w-md md:block">
-        <div
-          v-for="(b, i) in covers" :key="b.id"
-          class="absolute w-44 overflow-hidden rounded-xl shadow-2xl shadow-black/40 ring-1 ring-white/20 lg:w-48"
-          :style="pos[i]"
-        >
-          <BookCover :ebook="b" />
-        </div>
-      </div>
+      <div class="relative mx-auto h-[16rem] w-full max-w-md">
+  <div
+    v-for="(b, i) in covers"
+    :key="b.id"
+    class="absolute w-44 overflow-hidden rounded-xl shadow-2xl shadow-black/40 ring-1 ring-white/20 lg:w-48"
+    :style="pos[i]"
+  >
+    <BookCover :ebook="b" />
+  </div>
+</div>
     </div>
   </section>
 </template>

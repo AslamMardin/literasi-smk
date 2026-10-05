@@ -30,7 +30,7 @@ const bgGradient = computed(() => gradients[props.ebook?.kategori] || 'from-emer
       @error="failed = true"
     />
     <div v-else class="flex h-full flex-col justify-between p-5 text-amber-100">
-      <span class="text-2xl">📘</span>
+      <span class="text-2xl"><i class="bi bi-book"></i></span>
       <div>
         <p class="font-display text-lg font-bold leading-snug line-clamp-3">{{ ebook.judul }}</p>
         <p class="mt-2 text-xs opacity-80 truncate">{{ ebook.penulis }}</p>

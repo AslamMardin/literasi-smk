@@ -1,13 +1,71 @@
 <template>
-  <footer class="mt-20 bg-emerald-950 text-emerald-100/80">
-    <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 text-sm sm:flex-row">
-      <p class="font-display text-lg text-amber-200">Literasi Digital SMKN Campalagian</p>
-      <div class="flex items-center gap-5">
-        <a href="#/" class="transition hover:text-amber-200">Beranda</a>
-        <a href="#/koleksi" class="transition hover:text-amber-200">Koleksi</a>
-        <a href="#/tentang" class="transition hover:text-amber-200">Tentang</a>
+  <footer class="mt-16 bg-emerald-950 text-emerald-100">
+    <div class="mx-auto max-w-6xl px-5 py-10 sm:px-6">
+
+      <div class="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+
+        <!-- Identitas -->
+        <div class="max-w-md">
+          <h2 class="font-display text-xl font-semibold text-amber-200">
+            Literasi Digital
+          </h2>
+
+          <p class="mt-2 text-sm leading-6 text-emerald-100/70">
+            Ruang baca digital SMKN Campalagian untuk mendukung
+            budaya membaca dan memperluas akses siswa terhadap
+            berbagai sumber bacaan.
+          </p>
+        </div>
+
+        <!-- Navigasi -->
+        <div>
+          <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-amber-300">
+            Navigasi
+          </p>
+
+          <nav class="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+            <a
+              href="#/"
+              class="text-emerald-100/75 transition hover:text-amber-200"
+            >
+              Beranda
+            </a>
+
+            <a
+              href="#/koleksi"
+              class="text-emerald-100/75 transition hover:text-amber-200"
+            >
+              Koleksi
+            </a>
+
+            <a
+              href="#/tentang"
+              class="text-emerald-100/75 transition hover:text-amber-200"
+            >
+              Tentang
+            </a>
+          </nav>
+        </div>
+
       </div>
-      <p class="text-xs text-emerald-100/60">© {{ new Date().getFullYear() }} SMKN Campalagian</p>
+
+      <!-- Garis -->
+      <div class="my-7 border-t border-emerald-800"></div>
+
+      <!-- Copyright -->
+      <div class="flex flex-col gap-2 text-xs text-emerald-100/50 sm:flex-row sm:items-center sm:justify-between">
+        <p>
+          © 2026 SMKN Campalagian
+        </p>
+
+        <p>
+          Dikembangkan oleh
+          <span class="text-emerald-100/75">
+            Aslam Mardin, S.Kom., M.Kom., Gr.
+          </span>
+        </p>
+      </div>
+
     </div>
   </footer>
 </template>

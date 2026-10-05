@@ -39,26 +39,23 @@ function pilihKategori(k) {
       <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         <button
           v-for="k in daftarKategori" :key="k"
-          class="group rounded-2xl bg-white p-5 text-left shadow-sm ring-1 ring-emerald-900/5 transition hover:-translate-y-1 hover:shadow-xl"
+          class="group rounded-2xl bg-white px-5 py-2 text-left shadow-sm ring-1 ring-emerald-900/5 transition hover:-translate-y-1 hover:shadow-xl"
           @click="pilihKategori(k)"
         >
-          <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-xl transition group-hover:bg-emerald-800 group-hover:text-white">
-            {{ ikon[k] || '📚' }}
-          </span>
-          <p class="mt-4 font-semibold text-emerald-950">{{ k }}</p>
+          <p class="mt-4 font text-emerald-950">{{ k }}</p>
           <p class="text-xs text-stone-500">{{ jumlah(k) }} ebook</p>
         </button>
       </div>
     </section>
 
     <!-- Ajakan -->
-    <section class="mx-auto max-w-6xl px-5 sm:px-6">
+    <!-- <section class="mx-auto max-w-6xl px-5 sm:px-6">
       <div class="flex flex-col items-center justify-between gap-5 rounded-3xl bg-gradient-to-r from-emerald-800 to-emerald-900 px-8 py-10 text-center text-amber-50 sm:flex-row sm:text-left">
         <p class="font-display text-2xl font-bold">Mulai membaca hari ini.</p>
         <a href="#/koleksi" class="rounded-xl bg-amber-300 px-7 py-3 font-semibold text-emerald-950 shadow-lg transition hover:-translate-y-0.5 hover:bg-amber-200">
           Buka Koleksi
         </a>
       </div>
-    </section>
+    </section> -->
   </div>
 </template>

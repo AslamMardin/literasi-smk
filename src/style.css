@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700;800&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700;800&display=swap'); */
 
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: system-ui, sans-serif;
   background: #fbf7ef;
   color: #1f2d24;
 }
-.font-display { font-family: 'Playfair Display', Georgia, serif; }
+.font-display { font-family:  Georgia, serif; }
 
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(16px); }

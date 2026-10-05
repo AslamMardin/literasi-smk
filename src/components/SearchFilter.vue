@@ -10,7 +10,7 @@ defineEmits(['update:query', 'update:kategori'])
 <template>
   <div class="space-y-4">
     <div class="relative">
-      <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-stone-400">🔍</span>
+      <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"><i class="bi bi-search"></i></span>
       <input
         :value="query"
         type="search"

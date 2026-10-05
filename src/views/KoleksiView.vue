@@ -25,7 +25,7 @@ function reset() {
 
 <template>
   <div>
-    <PageHeader title="Koleksi Ebook" subtitle="Pilih bacaanmu." />
+    <!-- <PageHeader title="Koleksi Ebook" subtitle="Pilih bacaanmu." /> -->
 
     <div class="mx-auto max-w-6xl px-5 py-8 sm:px-6">
       <SearchFilter v-model:query="filter.query" v-model:kategori="filter.kategori" :daftar-kategori="daftarKategori" />
