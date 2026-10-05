@@ -14,9 +14,12 @@ export function downloadUrls(input) {
   ]
 }
 
-// Fallback: pratinjau bawaan Google Drive
 export const previewUrl = (input) =>
   `https://drive.google.com/file/d/${getFileId(input)}/preview`
 
 export const viewUrl = (input) =>
-  `https://drive.google.com/file/d/${getFileId(input)}/view`
+  `https://drive.google.com/file/d/${getFileId(input)}/view?usp=drivesdk`
+
+export const driveThumbnail = (input, size = 450) =>
+  `https://lh3.googleusercontent.com/d/${getFileId(input)}=w${size}`
+
