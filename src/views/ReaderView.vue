@@ -138,7 +138,7 @@ onBeforeUnmount(() => {
           <span class="w-12 text-center">{{ Math.round(zoom * 100) }}%</span>
           <button class="rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20" @click="zoomIn">+</button>
         </div>
-        <a v-else :href="viewUrl(ebook.id)" target="_blank" rel="noopener" class="rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20">Buka di Drive ↗</a>
+        <!-- <a v-else :href="viewUrl(ebook.id)" target="_blank" rel="noopener" class="rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20">Buka di Drive ↗</a> -->
       </div>
     </div>
 
@@ -154,9 +154,12 @@ onBeforeUnmount(() => {
       </div>
 
       <div v-if="status === 'fallback'">
-        <p class="mb-3 rounded-lg bg-amber-100 px-4 py-2 text-center text-xs text-amber-900">
+        <!-- <p class="mb-3 rounded-lg bg-amber-100 px-4 py-2 text-center text-xs text-amber-900">
           Mode pratinjau Google Drive digunakan karena file tidak dapat dimuat langsung.
-        </p>
+        </p> -->
+        <p class="mb-3 whitespace-normal break-words text-sm font-semibold leading-5 sm:hidden">
+  {{ ebook.judul }}
+</p>
         <iframe
           :src="previewUrl(ebook.id)"
           class="h-[80vh] w-full rounded-lg bg-white shadow-2xl"

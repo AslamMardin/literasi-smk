@@ -30,18 +30,18 @@ const serupa = computed(() =>
           <h1 class="font-display mt-4 text-3xl font-bold leading-tight text-emerald-950 sm:text-4xl">
             {{ ebook.judul }}
           </h1>
-          <p class="mt-2 text-lg text-stone-500">{{ ebook.penulis }}</p>
+          <p class="mt-2 text-lg text-stone-500"><i class="bi bi-person-fill"></i> {{ ebook.penulis }}</p>
 
           <div class="mt-5 flex flex-wrap justify-center gap-2 text-xs font-medium text-emerald-900 md:justify-start">
-            <span class="rounded-full bg-[#fbf7ef] px-3 py-1.5 ring-1 ring-emerald-900/10">📄 PDF</span>
-            <span class="rounded-full bg-[#fbf7ef] px-3 py-1.5 ring-1 ring-emerald-900/10">🔓 Tanpa login</span>
+            <span class="rounded-full bg-[#7F1D1D] text-white px-3 py-1.5 ring-1 ring-emerald-900/10">PDF</span>
+            
           </div>
 
           <a
             :href="`#/baca/${encodeURIComponent(ebook.id)}`"
             class="mt-8 inline-flex items-center gap-2 rounded-xl bg-emerald-800 px-9 py-4 font-semibold text-amber-50 shadow-lg shadow-emerald-900/30 transition hover:-translate-y-0.5 hover:bg-emerald-900"
           >
-            📖 Baca Ebook
+            Baca Ebook
           </a>
         </div>
       </div>
