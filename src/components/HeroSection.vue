@@ -21,13 +21,13 @@ function cari() {
 </script>
 
 <template>
-  <section class="relative overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-emerald-950 text-amber-50">
+  <section class="relative overflow-hidden bg-gradient-to-br from-[#3d1010] via-[#7F1D1D] to-[#1b0909] text-amber-50">
     <div class="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-amber-200/10 blur-3xl"></div>
-    <div class="pointer-events-none absolute -bottom-32 -left-20 h-96 w-96 rounded-full bg-emerald-400/10 blur-3xl"></div>
+    <div class="pointer-events-none absolute -bottom-32 -left-20 h-96 w-96 rounded-full bg-[#d7a6a6]/10 blur-3xl"></div>
 
     <div class="relative mx-auto grid max-w-6xl items-center gap-10 px-5 pb-24 pt-14 sm:px-6 md:grid-cols-[1.1fr_1fr] md:pb-28 md:pt-20">
       <div class="animate-fade-up">
-        <p class="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-amber-300">Gerakan Sulbar Madarras (GSM)</p>
+       
        <div class="flex items-center gap-3 sm:gap-4">
   <img
     src="/favicon.png"
@@ -39,14 +39,16 @@ function cari() {
     SMK NEGERI CAMPALAGIAN
   </h1>
 </div>
+        <p class="my-3 text-xs font-semibold uppercase tracking-[0.25em] text-amber-300">Gerakan Sulbar Madarras (GSM)</p>
        
 
-        <form class="mt-8 flex max-w-lg overflow-hidden rounded-2xl bg-white p-1.5 shadow-2xl" @submit.prevent="cari">
+
+        <form class="mt-2 flex max-w-lg overflow-hidden rounded-2xl bg-white p-1.5 shadow-2xl" @submit.prevent="cari">
           <input
             v-model="q" type="search" placeholder="Cari judul atau penulis…"
-            class="min-w-0 flex-1 bg-transparent px-4 text-sm text-emerald-950 outline-none placeholder:text-stone-400"
+            class="min-w-0 flex-1 bg-transparent px-4 text-sm text-[#3d1010] outline-none placeholder:text-stone-400"
           />
-          <button class="rounded-xl bg-emerald-800 px-5 py-3 text-sm font-semibold text-amber-50 transition hover:bg-emerald-900">
+          <button class="rounded-xl bg-[#7F1D1D] px-5 py-3 text-sm font-semibold text-amber-50 transition hover:bg-[#5b1717]">
             Cari
           </button>
         </form>

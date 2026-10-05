@@ -5,12 +5,12 @@ defineProps({ ebook: { type: Object, required: true } })
 
 <template>
   <a :href="`#/buku/${encodeURIComponent(ebook.id)}`" class="group block animate-fade-up">
-    <div class="relative overflow-hidden rounded-xl shadow-md shadow-emerald-900/15 ring-1 ring-black/5 transition duration-300 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-emerald-900/25">
+    <div class="relative overflow-hidden rounded-xl shadow-md shadow-[#7F1D1D]/15 ring-1 ring-black/5 transition duration-300 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-[#7F1D1D]/25">
       <BookCover :ebook="ebook" class="transition duration-500 group-hover:scale-105" />
-      <!-- <span class="absolute left-2.5 top-2.5 rounded-full bg-[#fbf7ef]/95 px-2.5 py-1 text-[10px] font-semibold text-emerald-800 shadow">
+      <!-- <span class="absolute left-2.5 top-2.5 rounded-full bg-[#f8f1f1]/95 px-2.5 py-1 text-[10px] font-semibold text-[#7F1D1D] shadow">
         {{ ebook.kategori }}
       </span> -->
-      <div class="absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-emerald-950/90 to-transparent p-4 pt-10 text-center text-sm font-semibold text-amber-100 transition duration-300 group-hover:translate-y-0">
+      <div class="absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-[#2d0909]/90 to-transparent p-4 pt-10 text-center text-sm font-semibold text-amber-100 transition duration-300 group-hover:translate-y-0">
         Lihat Detail →
       </div>
     </div>

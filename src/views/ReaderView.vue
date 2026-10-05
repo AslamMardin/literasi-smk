@@ -114,7 +114,7 @@ onBeforeUnmount(() => {
 <template>
   <div v-if="ebook" class="min-h-[calc(100vh-4rem)] bg-stone-200/70">
     <!-- Toolbar -->
-    <div class="sticky top-16 z-30 border-b border-emerald-950/20 bg-emerald-900 text-amber-50 shadow-md">
+    <div class="sticky top-16 z-30 border-b border-[#4a1d1d]/20 bg-[#7F1D1D] text-amber-50 shadow-md">
       <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-2.5 text-sm">
         <div class="flex min-w-0 items-center gap-3">
           <a :href="`#/buku/${encodeURIComponent(ebook.id)}`" class="shrink-0 rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20">← Kembali</a>
@@ -144,8 +144,8 @@ onBeforeUnmount(() => {
 
     <!-- Area baca -->
     <div ref="wrap" class="mx-auto max-w-5xl px-3 py-6">
-      <div v-if="status === 'loading'" class="flex flex-col items-center py-32 text-emerald-900">
-        <div class="h-10 w-10 animate-spin rounded-full border-4 border-emerald-800/20 border-t-emerald-800"></div>
+      <div v-if="status === 'loading'" class="flex flex-col items-center py-32 text-[#4a1d1d]">
+        <div class="h-10 w-10 animate-spin rounded-full border-4 border-[#7F1D1D]/20 border-t-[#7F1D1D]"></div>
         <p class="mt-4 text-sm">Membuka ebook…</p>
       </div>
 
@@ -172,7 +172,7 @@ onBeforeUnmount(() => {
 
   <div v-else class="mx-auto max-w-xl px-5 py-24 text-center">
     <p class="text-5xl">📚</p>
-    <h1 class="font-display mt-4 text-2xl font-bold text-emerald-950">Ebook tidak ditemukan</h1>
-    <a href="#/koleksi" class="mt-6 inline-block rounded-xl bg-emerald-800 px-6 py-3 font-semibold text-amber-50">Kembali ke Koleksi</a>
+    <h1 class="font-display mt-4 text-2xl font-bold text-[#4a1d1d]">Ebook tidak ditemukan</h1>
+    <a href="#/koleksi" class="mt-6 inline-block rounded-xl bg-[#7F1D1D] px-6 py-3 font-semibold text-amber-50">Kembali ke Koleksi</a>
   </div>
 </template>

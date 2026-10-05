@@ -31,8 +31,8 @@ function reset() {
       <SearchFilter v-model:query="filter.query" v-model:kategori="filter.kategori" :daftar-kategori="daftarKategori" />
 
       <div class="mb-6 mt-8 flex items-center justify-between text-sm text-stone-500">
-        <p><span class="font-semibold text-emerald-900">{{ hasil.length }}</span> ebook</p>
-        <button v-if="filter.query || filter.kategori" class="font-medium text-emerald-800 hover:underline" @click="reset">
+        <p><span class="font-semibold text-[#4a1d1d]">{{ hasil.length }}</span> ebook</p>
+        <button v-if="filter.query || filter.kategori" class="font-medium text-[#7F1D1D] hover:underline" @click="reset">
           Reset
         </button>
       </div>

@@ -24,7 +24,7 @@ const tujuan = [
 <template>
   <div>
     <PageHeader
-      title="Tentang Literasi Digital"
+      title="Tentang Gerakan Sulbar Madarras (GSM)"
       subtitle="Ruang baca digital SMKN Campalagian."
     />
 

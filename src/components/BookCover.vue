@@ -5,18 +5,18 @@ const props = defineProps({ ebook: { type: Object, required: true } })
 const failed = ref(false)
 
 const gradients = {
-  Novel: 'from-rose-800 via-rose-900 to-stone-900',
-  'Pengembangan Diri': 'from-emerald-800 via-emerald-900 to-teal-950',
-  Bisnis: 'from-amber-800 via-amber-900 to-stone-900',
-  Filsafat: 'from-indigo-800 via-indigo-900 to-slate-950',
-  Pendidikan: 'from-sky-800 via-sky-900 to-slate-950',
-  Sejarah: 'from-amber-900 via-stone-900 to-neutral-950',
-  Spiritual: 'from-teal-800 via-emerald-950 to-stone-950',
-  Teknologi: 'from-cyan-800 via-blue-900 to-slate-950',
-  Sastra: 'from-purple-800 via-purple-950 to-stone-950',
+  Novel: 'from-[#7F1D1D] via-[#5b1717] to-stone-900',
+  'Pengembangan Diri': 'from-[#8f2d2d] via-[#7F1D1D] to-[#2a0f0f]',
+  Bisnis: 'from-[#9f4a3f] via-[#7F1D1D] to-stone-900',
+  Filsafat: 'from-[#5f2d2d] via-[#4a1d1d] to-slate-950',
+  Pendidikan: 'from-[#8a3d3d] via-[#6d1f1f] to-slate-950',
+  Sejarah: 'from-[#7a2b2b] via-stone-900 to-neutral-950',
+  Spiritual: 'from-[#8d4a4a] via-[#4a1d1d] to-stone-950',
+  Teknologi: 'from-[#8b3a3a] via-[#4a1d1d] to-slate-950',
+  Sastra: 'from-[#7a3f3f] via-[#4b1c1c] to-stone-950',
 }
 
-const bgGradient = computed(() => gradients[props.ebook?.kategori] || 'from-emerald-800 to-emerald-950')
+const bgGradient = computed(() => gradients[props.ebook?.kategori] || 'from-[#7F1D1D] to-[#2d0909]')
 </script>
 
 <template>

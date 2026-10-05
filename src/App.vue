@@ -32,7 +32,7 @@ watch(route, () => window.scrollTo(0, 0))
 </script>
 
 <template>
-  <div class="flex min-h-screen flex-col bg-[#fbf7ef]">
+  <div class="flex min-h-screen flex-col bg-[#f8f1f1]">
     <AppHeader :active="active" />
     <main class="flex-1">
       <HomeView v-if="route.name === 'home'" />

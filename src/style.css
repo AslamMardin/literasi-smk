@@ -4,8 +4,8 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
-  background: #fbf7ef;
-  color: #6C1A1A;
+  background: #f8f1f1;
+  color: #3d1c1c;
 }
 .font-display { font-family: 'Playfair Display', Georgia, serif; }
 

@@ -26,23 +26,23 @@ function pilihKategori(k) {
 
     <EbookSection title="Ebook Terbaru" link="#/koleksi" :ebooks="terbaru" />
 
-    <div class="bg-emerald-900/[0.04]">
+    <div class="bg-[#7F1D1D]/[0.04]">
       <EbookSection title="Rekomendasi" link="#/koleksi" :ebooks="rekomendasi" />
     </div>
 
     <!-- Kategori -->
     <section class="mx-auto max-w-6xl px-5 py-12 sm:px-6">
       <div class="mb-7">
-        <h2 class="font-display text-2xl font-bold text-emerald-950 sm:text-3xl">Kategori</h2>
-        <div class="mt-2 h-1 w-12 rounded-full bg-amber-400"></div>
+        <h2 class="font-display text-2xl font-bold text-[#4a1d1d] sm:text-3xl">Kategori</h2>
+        <div class="mt-2 h-1 w-12 rounded-full bg-[#d97706]"></div>
       </div>
       <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         <button
           v-for="k in daftarKategori" :key="k"
-          class="group rounded-2xl bg-white px-5 py-2 text-left shadow-sm ring-1 ring-emerald-900/5 transition hover:-translate-y-1 hover:shadow-xl"
+          class="group rounded-2xl bg-white px-5 py-2 text-left shadow-sm ring-1 ring-[#7F1D1D]/5 transition hover:-translate-y-1 hover:shadow-xl"
           @click="pilihKategori(k)"
         >
-          <p class="mt-4 font text-emerald-950">{{ k }}</p>
+          <p class="mt-4 font text-[#4a1d1d]">{{ k }}</p>
           <p class="text-xs text-stone-500">{{ jumlah(k) }} ebook</p>
         </button>
       </div>

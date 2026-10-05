@@ -11,10 +11,10 @@ defineProps({
   <section class="mx-auto max-w-6xl px-5 py-12 sm:px-6">
     <div class="mb-7 flex items-end justify-between gap-4">
       <div>
-        <h2 class="font-display text-2xl font-bold text-emerald-950 sm:text-3xl">{{ title }}</h2>
-        <div class="mt-2 h-1 w-12 rounded-full bg-amber-400"></div>
+        <h2 class="font-display text-2xl font-bold text-[#4a1d1d] sm:text-3xl">{{ title }}</h2>
+        <div class="mt-2 h-1 w-12 rounded-full bg-[#d97706]"></div>
       </div>
-      <a v-if="link" :href="link" class="shrink-0 text-sm font-semibold text-emerald-800 transition hover:text-emerald-600">
+      <a v-if="link" :href="link" class="shrink-0 text-sm font-semibold text-[#7F1D1D] transition hover:text-[#5b1717]">
         Lihat semua →
       </a>
     </div>
