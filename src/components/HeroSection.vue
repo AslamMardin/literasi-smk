@@ -36,7 +36,7 @@ function cari() {
   />
 
   <h1 class="font-display text-2xl font-bold leading-tight sm:text-4xl lg:text-5xl">
-    SMKN CAMPALAGIAN
+    SMK NEGERI CAMPALAGIAN
   </h1>
 </div>
        

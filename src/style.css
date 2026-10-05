@@ -5,9 +5,9 @@ body {
   margin: 0;
   font-family: system-ui, sans-serif;
   background: #fbf7ef;
-  color: #1f2d24;
+  color: #6C1A1A;
 }
-.font-display { font-family:  Georgia, serif; }
+.font-display { font-family: 'Playfair Display', Georgia, serif; }
 
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(16px); }
