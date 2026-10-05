@@ -158,7 +158,7 @@ onBeforeUnmount(() => {
           Mode pratinjau Google Drive digunakan karena file tidak dapat dimuat langsung.
         </p> -->
         <p class="mb-3 whitespace-normal break-words text-sm font-semibold leading-5 sm:hidden">
-  {{ ebook.judul }}
+  Judul : {{ ebook.judul }}
 </p>
         <iframe
           :src="previewUrl(ebook.id)"
