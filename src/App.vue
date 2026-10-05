@@ -1,166 +1,46 @@
+<script setup>
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import AppHeader from './components/AppHeader.vue'
+import AppFooter from './components/AppFooter.vue'
+import HomeView from './views/HomeView.vue'
+import KoleksiView from './views/KoleksiView.vue'
+import TentangView from './views/TentangView.vue'
+import DetailView from './views/DetailView.vue'
+import ReaderView from './views/ReaderView.vue'
+
+const hash = ref(window.location.hash)
+const onHash = () => (hash.value = window.location.hash)
+onMounted(() => window.addEventListener('hashchange', onHash))
+onBeforeUnmount(() => window.removeEventListener('hashchange', onHash))
+
+// Halaman: beranda (#/), koleksi, tentang, buku/ID (detail), baca/ID (reader)
+const route = computed(() => {
+  const [name, ...rest] = hash.value.replace(/^#\/?/, '').split('/')
+  const id = decodeURIComponent(rest.join('/'))
+  if (name === 'buku' && id) return { name: 'detail', id }
+  if (name === 'baca' && id) return { name: 'reader', id }
+  if (name === 'koleksi') return { name: 'koleksi' }
+  if (name === 'tentang') return { name: 'tentang' }
+  return { name: 'home' }
+})
+
+const active = computed(() =>
+  ['detail', 'reader'].includes(route.value.name) ? 'koleksi' : route.value.name
+)
+
+watch(route, () => window.scrollTo(0, 0))
+</script>
+
 <template>
-  <div class="app">
-    <header class="header">
-      <div class="container">
-        <h1>📚 Literasi Digital</h1>
-        <p>SMKN Campalagian</p>
-      </div>
-    </header>
-
-    <main class="container">
-      <section class="hero">
-        <h2>Selamat Datang 👋</h2>
-        <p>
-          Temukan dan baca berbagai koleksi ebook
-          untuk menambah wawasan dan pengetahuan.
-        </p>
-
-        <button>Mulai Membaca</button>
-      </section>
-
-      <section class="info">
-        <div class="card">
-          <span>📖</span>
-          <h3>Koleksi Ebook</h3>
-          <p>Berbagai bahan bacaan tersedia untuk siswa.</p>
-        </div>
-
-        <div class="card">
-          <span>🔍</span>
-          <h3>Mudah Dicari</h3>
-          <p>Temukan ebook berdasarkan judul dan kategori.</p>
-        </div>
-
-        <div class="card">
-          <span>💻</span>
-          <h3>Baca Online</h3>
-          <p>Akses ebook kapan saja melalui perangkatmu.</p>
-        </div>
-      </section>
+  <div class="flex min-h-screen flex-col bg-[#fbf7ef]">
+    <AppHeader :active="active" />
+    <main class="flex-1">
+      <HomeView v-if="route.name === 'home'" />
+      <KoleksiView v-else-if="route.name === 'koleksi'" />
+      <TentangView v-else-if="route.name === 'tentang'" />
+      <DetailView v-else-if="route.name === 'detail'" :key="route.id" :id="route.id" />
+      <ReaderView v-else-if="route.name === 'reader'" :key="route.id" :id="route.id" />
     </main>
-
-    <footer>
-      <p>© 2026 SMKN Campalagian</p>
-    </footer>
+    <AppFooter v-if="route.name !== 'reader'" />
   </div>
 </template>
-
-<style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f7fa;
-  color: #1f2937;
-}
-
-.app {
-  min-height: 100vh;
-}
-
-.container {
-  width: 90%;
-  max-width: 1100px;
-  margin: auto;
-}
-
-.header {
-  background: #ff2802;
-  color: white;
-  padding: 20px 0;
-}
-
-.header h1 {
-  font-size: 24px;
-}
-
-.header p {
-  margin-top: 5px;
-  opacity: 0.9;
-}
-
-.hero {
-  text-align: center;
-  padding: 80px 20px;
-}
-
-.hero h2 {
-  font-size: 42px;
-  margin-bottom: 15px;
-}
-
-.hero p {
-  max-width: 600px;
-  margin: auto;
-  line-height: 1.7;
-  color: #6b7280;
-}
-
-.hero button {
-  margin-top: 30px;
-  padding: 12px 25px;
-  border: none;
-  border-radius: 8px;
-  background: #166534;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.hero button:hover {
-  background: #14532d;
-}
-
-.info {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  padding-bottom: 60px;
-}
-
-.card {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-}
-
-.card span {
-  font-size: 35px;
-}
-
-.card h3 {
-  margin: 15px 0 10px;
-}
-
-.card p {
-  color: #6b7280;
-  line-height: 1.6;
-}
-
-footer {
-  text-align: center;
-  padding: 25px;
-  background: #111827;
-  color: white;
-}
-
-@media (max-width: 700px) {
-  .hero {
-    padding: 60px 15px;
-  }
-
-  .hero h2 {
-    font-size: 32px;
-  }
-
-  .info {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
