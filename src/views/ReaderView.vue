@@ -120,7 +120,9 @@ onBeforeUnmount(() => {
           <div class="flex min-w-0 items-center gap-3">
             <a :href="`#/buku/${encodeURIComponent(ebook.id)}`" class="shrink-0 rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20">← Kembali</a>
             <a href="#/koleksi" class="hidden shrink-0 rounded-lg px-3 py-1.5 transition hover:bg-white/10 sm:block">Koleksi</a>
-            <span class="font-display hidden truncate font-semibold md:block">{{ ebook.judul }}</span>
+            <span class="font-display block max-w-[180px] truncate font-semibold md:max-w-none">
+  {{ ebook.judul }}
+</span>
           </div>
           <!-- <a :href="viewUrl(ebook.id)" target="_blank" rel="noopener noreferrer" class="shrink-0 rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20">Buka di Drive ↗</a> -->
         </div>
@@ -149,7 +151,7 @@ onBeforeUnmount(() => {
     </div>
 
     <!-- Area baca -->
-    <div ref="wrap" class="mx-auto max-w-5xl px-3 py-6">
+    <div ref="wrap" class="mx-auto max-w-5xl ">
       <div v-if="status === 'loading'" class="flex flex-col items-center py-32 text-[#4a1d1d]">
         <div class="h-10 w-10 animate-spin rounded-full border-4 border-[#7F1D1D]/20 border-t-[#7F1D1D]"></div>
         <p class="mt-4 text-sm">Membuka ebook…</p>
@@ -163,12 +165,10 @@ onBeforeUnmount(() => {
         <!-- <p class="mb-3 rounded-lg bg-amber-100 px-4 py-2 text-center text-xs text-amber-900">
           Mode pratinjau Google Drive digunakan karena file tidak dapat dimuat langsung.
         </p> -->
-        <p class="mb-3 whitespace-normal break-words text-sm font-semibold leading-5 sm:hidden">
-  Judul : {{ ebook.judul }}
-</p>
+  
         <iframe
           :src="previewUrl(ebook.id)"
-          class="h-[80vh] w-full rounded-lg bg-white shadow-2xl"
+          class="h-[90vh] w-full bg-white shadow-2xl"
           allow="autoplay"
           title="Pratinjau Ebook"
         ></iframe>

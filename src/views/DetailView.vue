@@ -39,7 +39,7 @@ const serupa = computed(() =>
 
           <a
             :href="`#/baca/${encodeURIComponent(ebook.id)}`"
-            class="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#7F1D1D] px-9 py-4 font-semibold text-amber-50 shadow-lg shadow-[#7F1D1D]/30 transition hover:-translate-y-0.5 hover:bg-[#5b1717]"
+            class="animate-read-cta mt-8 inline-flex items-center gap-2 rounded-xl bg-[#7F1D1D] px-9 py-4 font-semibold text-amber-50 shadow-lg shadow-[#7F1D1D]/30 transition hover:-translate-y-0.5 hover:bg-[#5b1717]"
           >
             Baca Ebook
           </a>
@@ -56,3 +56,21 @@ const serupa = computed(() =>
     <a href="#/koleksi" class="mt-6 inline-block rounded-xl bg-[#7F1D1D] px-6 py-3 font-semibold text-amber-50">Kembali ke Koleksi</a>
   </div>
 </template>
+
+<style scoped>
+@keyframes read-cta-wiggle {
+  0%, 84%, 100% { translate: 0 0; }
+  86%, 90%, 94%, 98% { translate: -3px 0; }
+  88%, 92%, 96% { translate: 3px 0; }
+}
+
+.animate-read-cta {
+  animation: read-cta-wiggle 1s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-read-cta {
+    animation: none;
+  }
+}
+</style>
