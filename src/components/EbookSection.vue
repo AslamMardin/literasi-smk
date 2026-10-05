@@ -4,6 +4,7 @@ defineProps({
   title: String,
   link: String, // jika diisi, tampil "Lihat semua"
   ebooks: { type: Array, default: () => [] },
+  horizontal: { type: Boolean, default: false },
 })
 </script>
 
@@ -18,6 +19,6 @@ defineProps({
         Lihat semua →
       </a>
     </div>
-    <EbookGrid :ebooks="ebooks" />
+    <EbookGrid :ebooks="ebooks" :horizontal="horizontal" />
   </section>
 </template>

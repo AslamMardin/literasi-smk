@@ -6,7 +6,7 @@ import { ebooks, getKategori, getPenulisCount, getTerbaru, getRekomendasi } from
 import { filter } from '../data/filter'
 
 const daftarKategori = getKategori()
-const terbaru = getTerbaru(4)
+const terbaru = getTerbaru(16)
 const rekomendasi = getRekomendasi()
 
 const ikon = { Novel: '📖', Teknologi: '💻', Pelajaran: '🎓', 'Pengembangan Diri': '🌱', Sastra: '✍️' }
@@ -24,7 +24,7 @@ function pilihKategori(k) {
     <HeroSection />
     <StatsBar :ebook="ebooks.length" :kategori="daftarKategori.length" :penulis="getPenulisCount()" />
 
-    <EbookSection title="Ebook Terbaru" link="#/koleksi" :ebooks="terbaru" />
+    <EbookSection title="Ebook Terbaru" link="#/koleksi" :ebooks="terbaru" horizontal />
 
     <div class="bg-[#7F1D1D]/[0.04]">
       <EbookSection title="Rekomendasi" link="#/koleksi" :ebooks="rekomendasi" />
