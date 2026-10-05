@@ -115,30 +115,36 @@ onBeforeUnmount(() => {
   <div v-if="ebook" class="min-h-[calc(100vh-4rem)] bg-stone-200/70">
     <!-- Toolbar -->
     <div class="sticky top-16 z-30 border-b border-[#4a1d1d]/20 bg-[#7F1D1D] text-amber-50 shadow-md">
-      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-2.5 text-sm">
-        <div class="flex min-w-0 items-center gap-3">
-          <a :href="`#/buku/${encodeURIComponent(ebook.id)}`" class="shrink-0 rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20">← Kembali</a>
-          <a href="#/koleksi" class="hidden shrink-0 rounded-lg px-3 py-1.5 transition hover:bg-white/10 sm:block">Koleksi</a>
-          <span class="font-display hidden truncate font-semibold md:block">{{ ebook.judul }}</span>
+      <div class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-2.5 text-sm">
+        <div class="flex min-w-0 items-center justify-between gap-3">
+          <div class="flex min-w-0 items-center gap-3">
+            <a :href="`#/buku/${encodeURIComponent(ebook.id)}`" class="shrink-0 rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20">← Kembali</a>
+            <a href="#/koleksi" class="hidden shrink-0 rounded-lg px-3 py-1.5 transition hover:bg-white/10 sm:block">Koleksi</a>
+            <span class="font-display hidden truncate font-semibold md:block">{{ ebook.judul }}</span>
+          </div>
+          <!-- <a :href="viewUrl(ebook.id)" target="_blank" rel="noopener noreferrer" class="shrink-0 rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20">Buka di Drive ↗</a> -->
         </div>
 
-        <div v-if="status === 'ready'" class="flex items-center gap-2">
-          <button class="rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20 disabled:opacity-40" :disabled="page <= 1" @click="goTo(page - 1)">‹</button>
-          <span class="flex items-center gap-1">
-            <input
-              :value="page" type="number" min="1" :max="total"
-              class="w-14 rounded-md bg-white/10 px-2 py-1 text-center outline-none focus:bg-white/20"
-              @change="goTo($event.target.value)"
-            />
-            <span class="opacity-80">/ {{ total }}</span>
-          </span>
-          <button class="rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20 disabled:opacity-40" :disabled="page >= total" @click="goTo(page + 1)">›</button>
-          <span class="mx-1 h-5 w-px bg-white/20"></span>
-          <button class="rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20" @click="zoomOut">−</button>
-          <span class="w-12 text-center">{{ Math.round(zoom * 100) }}%</span>
-          <button class="rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20" @click="zoomIn">+</button>
+        <div v-if="status === 'ready'" class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="font-semibold">Zoom</span>
+            <button aria-label="Perkecil tampilan" class="rounded-lg bg-white/15 px-4 py-1.5 text-lg font-semibold transition hover:bg-white/25 disabled:opacity-40" :disabled="zoom <= 0.5" @click="zoomOut">−</button>
+            <span class="w-12 text-center font-semibold">{{ Math.round(zoom * 100) }}%</span>
+            <button aria-label="Perbesar tampilan" class="rounded-lg bg-white/15 px-4 py-1.5 text-lg font-semibold transition hover:bg-white/25 disabled:opacity-40" :disabled="zoom >= 3" @click="zoomIn">+</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <button aria-label="Halaman sebelumnya" class="rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20 disabled:opacity-40" :disabled="page <= 1" @click="goTo(page - 1)">‹</button>
+            <span class="flex items-center gap-1">
+              <input
+                :value="page" type="number" min="1" :max="total"
+                class="w-14 rounded-md bg-white/10 px-2 py-1 text-center outline-none focus:bg-white/20"
+                @change="goTo($event.target.value)"
+              />
+              <span class="opacity-80">/ {{ total }}</span>
+            </span>
+            <button aria-label="Halaman berikutnya" class="rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20 disabled:opacity-40" :disabled="page >= total" @click="goTo(page + 1)">›</button>
+          </div>
         </div>
-        <!-- <a v-else :href="viewUrl(ebook.id)" target="_blank" rel="noopener" class="rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20">Buka di Drive ↗</a> -->
       </div>
     </div>
 
@@ -171,7 +177,7 @@ onBeforeUnmount(() => {
   </div>
 
   <div v-else class="mx-auto max-w-xl px-5 py-24 text-center">
-    <p class="text-5xl">📚</p>
+    <!-- <p class="text-5xl">📚</p> -->
     <h1 class="font-display mt-4 text-2xl font-bold text-[#4a1d1d]">Ebook tidak ditemukan</h1>
     <a href="#/koleksi" class="mt-6 inline-block rounded-xl bg-[#7F1D1D] px-6 py-3 font-semibold text-amber-50">Kembali ke Koleksi</a>
   </div>
