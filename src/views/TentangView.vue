@@ -6,7 +6,7 @@ import PageHeader from '../components/PageHeader.vue'
 
 const pengurusKegiatan = [
   { jabatan: 'Pembina', nama: 'Rasjuddin, S.Pd.I., MM.', foto: '/people/kepsek.PNG' },
-  { jabatan: 'Ketua', nama: 'Abrianto Yasin, S.Pd.', foto: '/images/avatar-ketua.svg' },
+  { jabatan: 'Ketua', nama: 'Abrianto Yasin, S.Pd.', foto: '/people/abi.jpeg' },
   { jabatan: 'Sekretaris', nama: 'Aslam Mardin, S.Kom., M.Kom., Gr.', foto: '/people/2023-2.jpg' },
   { jabatan: 'Bendahara', nama: 'Nisrawati, S.Pd.I', foto: '/images/avatar-bendahara.svg' },
   { jabatan: 'Koordinator Materi', nama: 'Andi Reski Tappawali, S.Pd', foto: '/images/avatar-koordinator.svg' }
@@ -129,55 +129,7 @@ const keahlianPencipta = [
   { nama: 'Teknologi Pendidikan', icon: 'bi-mortarboard-fill' }
 ]
 
-const teknologiPencipta = [
-  'Vue.js', 'JavaScript', 'PHP', 'Laravel', 'HTML5 & CSS3',
-  'Bootstrap', 'Python', 'MySQL', 'Firebase', 'Flutter',
-  'Figma', 'Canva', 'CorelDRAW', 'Git & GitHub', 'Machine Learning'
-]
 
-const riwayatPendidikan = [
-  {
-    jenjang: 'Magister Sistem Komputer (S2)',
-    institusi: 'Universitas Handayani Makassar',
-    periode: '2023 – 2025',
-    icon: 'bi-mortarboard-fill'
-  },
-  {
-    jenjang: 'Sarjana Komputer (S1) & Pendidik (Gr.)',
-    institusi: 'Universitas Al Asyariah Mandar / STAIN Majene',
-    periode: '2015 – 2018',
-    icon: 'bi-award-fill'
-  }
-]
-
-const pengalamanPencipta = [
-  {
-    peran: 'Pendidik & Praktisi TI',
-    tempat: 'TK Al-Ittihad & SMK di Sulawesi Barat',
-    waktu: '2019 – Sekarang'
-  },
-  {
-    peran: 'Penanggung Jawab Media Center',
-    tempat: 'PPM Al-Ikhlash Lampoko',
-    waktu: '2023'
-  },
-  {
-    peran: 'Olimpiade APJI Mikrotik Nasional',
-    tempat: 'Tingkat Nasional di Makassar',
-    waktu: '2016'
-  }
-]
-
-const prinsipPencipta = [
-  {
-    quote: 'Jangan terlalu memikirkan uang, kalau ada pengeluaranmu, adaji itu rezeki.',
-    tokoh: 'Abidin'
-  },
-  {
-    quote: 'Lanjut miki S2. Jangan terlalu putus asa jika gagal, begitu memang dunia.',
-    tokoh: 'Mardawiah'
-  }
-]
 
 const fotoPenciptaGagal = ref(false)
 </script>
@@ -239,7 +191,7 @@ const fotoPenciptaGagal = ref(false)
           </article>
         </div>
 
-        <div class="rounded-2xl border border-amber-900/10 bg-white p-5 sm:p-6 shadow-sm">
+        <!-- <div class="rounded-2xl border border-amber-900/10 bg-white p-5 sm:p-6 shadow-sm">
           <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
             <h3 class="font-display text-lg font-bold text-[#4a1d1d]">
               Siswa yang Terlibat
@@ -260,7 +212,7 @@ const fotoPenciptaGagal = ref(false)
               <span>{{ siswa.nama }}</span>
             </li>
           </ol>
-        </div>
+        </div> -->
       </section>
 
       <!-- Galeri Foto Dokumentasi Kegiatan Literasi -->

@@ -9,7 +9,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'published'])
 
-const { studentName, studentClass, setStudentProfile, setStudentName } = useLiterasi()
+const { studentName, studentNis, studentClass, setStudentProfile } = useLiterasi()
 const { tambahPuisi } = usePuisi()
 
 const judul = ref('')
@@ -60,6 +60,11 @@ async function handleSubmit() {
     return
   }
 
+  if (!studentNis.value.trim() || !studentClass.value.trim() || penulis.value.trim().toLocaleLowerCase() !== studentName.value.trim().toLocaleLowerCase()) {
+    errorMessage.value = 'Lengkapi NIS, nama, dan kelas di profil, lalu gunakan nama yang sama dengan profil siswa.'
+    return
+  }
+
   if (!isi.value.trim()) {
     errorMessage.value = 'Isi puisi tidak boleh kosong.'
     return
@@ -79,6 +84,7 @@ async function handleSubmit() {
     await tambahPuisi({
       judul: judul.value,
       penulis: penulis.value,
+      pemilikNis: studentNis.value,
       kelas: kelas.value,
       kategori: kategori.value,
       isi: isi.value

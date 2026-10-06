@@ -4,16 +4,37 @@ import { usePuisi } from '../composables/usePuisi'
 import { useLiterasi } from '../composables/useLiterasi'
 import PuisiCard from '../components/PuisiCard.vue'
 import TulisPuisiModal from '../components/TulisPuisiModal.vue'
+import EditPuisiModal from '../components/EditPuisiModal.vue'
 
 const { puisiList, isLoading, toggleLike, hasLiked, hapusPuisi } = usePuisi()
-const { studentName } = useLiterasi()
+const { studentName, studentNis, studentClass } = useLiterasi()
 
 const searchQuery = ref('')
 const selectedCategory = ref('Semua')
 const isModalOpen = ref(false)
+const isEditModalOpen = ref(false)
+const targetPuisiToEdit = ref(null)
 
 // Status Admin: Khusus jika nama siswa adalah 'Aslam Mardin' (tidak sensitif huruf besar/kecil)
 const isAdmin = computed(() => (studentName.value || '').trim().toLowerCase() === 'aslam mardin')
+
+function isPuisiOwner(puisi) {
+  const currentName = (studentName.value || '').trim().toLocaleLowerCase()
+  const currentNis = (studentNis.value || '').trim()
+  return Boolean(
+    currentName &&
+    currentName === (puisi.penulis || '').trim().toLocaleLowerCase() &&
+    currentNis &&
+    currentNis === String(puisi.pemilikNis || '').trim() &&
+    (studentClass.value || '').trim()
+  )
+}
+
+function openEditModal(puisi) {
+  if (!isPuisiOwner(puisi) || puisi.id.startsWith('sample-')) return
+  targetPuisiToEdit.value = puisi
+  isEditModalOpen.value = true
+}
 
 // State Konfirmasi Hapus Puisi
 const isDeleteModalOpen = ref(false)
@@ -96,11 +117,7 @@ const filteredPuisi = computed(() => {
       <div class="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-red-400/10 blur-3xl"></div>
 
       <div class="relative z-10 mx-auto max-w-5xl text-center">
-        <!-- Badge Atas -->
-        <div class="inline-flex items-center gap-2 rounded-full border border-amber-300/30 bg-amber-300/10 px-3.5 py-1 text-xs font-semibold text-amber-200 backdrop-blur mb-3">
-          <i class="bi bi-feather text-amber-400"></i>
-          <span>Pojok Sastra & Ekspresi Kreatif Siswa</span>
-        </div>
+        
 
         <h1 class="font-display text-2xl font-bold tracking-tight sm:text-4xl">
           Karya Puisi & Kalindaqdaq Siswa
@@ -165,9 +182,7 @@ const filteredPuisi = computed(() => {
       <div class="mt-4 flex items-center justify-between text-xs text-stone-500">
         <div class="flex items-center gap-2">
           <span>Menampilkan <strong class="text-[#7F1D1D]">{{ filteredPuisi.length }}</strong> karya puisi</span>
-          <span v-if="isAdmin" class="rounded-md bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-900 border border-amber-300">
-            Mode Kelola (Admin: Aslam Mardin)
-          </span>
+         
         </div>
         <button
           @click="isModalOpen = true"
@@ -190,8 +205,10 @@ const filteredPuisi = computed(() => {
           :key="p.id"
           :puisi="p"
           :is-liked="hasLiked(p.id)"
+          :is-owner="isPuisiOwner(p) && !p.id.startsWith('sample-')"
           :is-admin="isAdmin"
           @toggle-like="toggleLike"
+          @edit-puisi="openEditModal"
           @delete-puisi="openDeleteModal"
         />
       </div>
@@ -222,6 +239,12 @@ const filteredPuisi = computed(() => {
     <TulisPuisiModal
       :is-open="isModalOpen"
       @close="isModalOpen = false"
+    />
+
+    <EditPuisiModal
+      :is-open="isEditModalOpen"
+      :puisi="targetPuisiToEdit"
+      @close="isEditModalOpen = false"
     />
 
     <!-- Modal Konfirmasi Hapus Puisi (Khusus Aslam Mardin) -->

@@ -7,22 +7,25 @@ const props = defineProps({
     required: true
   },
   isLiked: Boolean,
+  isOwner: Boolean,
   isAdmin: Boolean
 })
 
-const emit = defineEmits(['toggle-like', 'delete-puisi'])
+const emit = defineEmits(['toggle-like', 'delete-puisi', 'edit-puisi'])
 
 const copied = ref(false)
 
-function copyPuisi() {
+async function copyPuisi() {
   const authorInfo = props.puisi.kelas ? `${props.puisi.penulis} (${props.puisi.kelas})` : props.puisi.penulis
   const text = `"${props.puisi.judul}"\nKarya: ${authorInfo}\n\n${props.puisi.isi}\n\n— Dibagikan dari Literasi SMK Campalagian`
-  navigator.clipboard.writeText(text).then(() => {
+
+  try {
+    await navigator.clipboard.writeText(text)
     copied.value = true
-    setTimeout(() => {
-      copied.value = false
-    }, 2000)
-  })
+    setTimeout(() => { copied.value = false }, 2000)
+  } catch (error) {
+    console.error('Gagal menyalin puisi:', error)
+  }
 }
 
 function formatDate(ts) {
@@ -37,111 +40,93 @@ function formatDate(ts) {
 </script>
 
 <template>
-  <div class="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-amber-900/10 bg-[#fffdf9] p-5 sm:p-6 shadow-sm shadow-amber-950/5 ring-1 ring-[#7F1D1D]/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#7F1D1D]/10">
-    <!-- Top Decorative Gradient Line -->
-    <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-amber-400 via-[#7F1D1D] to-amber-600 opacity-80"></div>
-
-    <div>
-      <!-- Header Kartu: Kategori & Tanggal -->
-      <div class="flex items-center justify-between gap-2 border-b border-amber-900/5 pb-3">
-        <span
-          class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-bold"
-          :class="puisi.kategori === 'Kalindaqdaq Mandar'
-            ? 'bg-amber-100 text-amber-900 border border-amber-300/60'
-            : 'bg-[#7F1D1D]/10 text-[#7F1D1D]'"
-        >
-          <i v-if="puisi.kategori === 'Kalindaqdaq Mandar'" class="bi bi-feather"></i>
-          <i v-else class="bi bi-tag-fill text-[9px]"></i>
-          <span>{{ puisi.kategori }}</span>
-        </span>
-
-        <div class="flex items-center gap-2">
-          <span class="text-[11px] text-stone-400 font-medium">
-            {{ formatDate(puisi.createdAt) }}
-          </span>
-
-          <!-- Tombol Hapus Khusus Admin (Aslam Mardin) -->
-          <button
-            v-if="isAdmin"
-            type="button"
-            @click="emit('delete-puisi', puisi)"
-            class="flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition shadow-sm"
-            title="Hapus Puisi Ini (Admin)"
-          >
-            <i class="bi bi-trash3 text-xs"></i>
-          </button>
-        </div>
+  <article class="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-[18px] border border-[#e9e1d4] bg-[#fffdf8] p-5 shadow-[0_2px_12px_rgba(64,44,25,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_24px_rgba(64,44,25,0.09)] sm:p-6">
+    <div class="flex items-start justify-between gap-3">
+      <div class="min-w-0">
+       
+        <time v-if="formatDate(puisi.createdAt)" class="mt-1.5 block text-[11px] font-medium text-stone-400">
+          {{ formatDate(puisi.createdAt) }}
+        </time>
       </div>
-
-      <!-- Judul Puisi -->
-      <h3 class="mt-4 font-display text-lg sm:text-xl font-bold leading-snug text-[#4a1313] transition group-hover:text-[#7F1D1D]">
-        {{ puisi.judul }}
-      </h3>
-
-      <!-- Penulis Sastra & Kelas -->
-      <div class="mt-3 flex items-center justify-between gap-2 flex-wrap border-t border-amber-900/5 pt-2.5">
-        <div class="flex items-center gap-2">
-          <div class="flex h-7 w-7 items-center justify-center rounded-full bg-[#7F1D1D] text-xs font-bold text-amber-100 shadow-sm">
-            {{ (puisi.penulis || 'S').charAt(0).toUpperCase() }}
-          </div>
-          <div class="flex flex-col text-left">
-            <span class="text-xs font-bold text-stone-800">
-              {{ puisi.penulis }}
-            </span>
-            <span v-if="puisi.kelas" class="text-[11px] font-semibold text-[#7F1D1D]">
-              {{ puisi.kelas }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Badge Kelas Siswa -->
-        <span
-          v-if="puisi.kelas"
-          class="rounded-lg bg-amber-100/70 border border-amber-300/60 px-2 py-0.5 text-[10px] font-bold text-amber-950"
+      <div class="flex items-center gap-1">
+        <button
+          v-if="isOwner"
+          type="button"
+          @click="emit('edit-puisi', puisi)"
+          class="flex h-8 w-8 items-center justify-center rounded-full text-stone-400 transition hover:bg-amber-100 hover:text-amber-900"
+          title="Edit puisi"
+          aria-label="Edit puisi"
         >
-          <i class="bi bi-mortarboard-fill mr-1 text-amber-800"></i>{{ puisi.kelas }}
-        </span>
-      </div>
-
-      <!-- Isi Puisi (Bait demi Bait) -->
-      <div class="relative my-4 rounded-xl bg-amber-50/50 p-4 border border-amber-200/40">
-        <p class="whitespace-pre-line font-serif text-sm leading-relaxed text-stone-800 italic">
-          {{ puisi.isi }}
-        </p>
+          <i class="bi bi-pencil-square text-sm"></i>
+        </button>
+        <button
+          v-if="isAdmin"
+          type="button"
+          @click="emit('delete-puisi', puisi)"
+          class="flex h-8 w-8 items-center justify-center rounded-full text-stone-400 transition hover:bg-red-50 hover:text-red-600"
+          title="Hapus puisi"
+          aria-label="Hapus puisi"
+        >
+          <i class="bi bi-trash3 text-sm"></i>
+        </button>
       </div>
     </div>
 
-    <!-- Footer Kartu: Tombol Apresiasi (Like) & Bagikan -->
-    <div class="mt-2 flex items-center justify-between border-t border-amber-900/5 pt-3">
-      <!-- Tombol Apresiasi (Love) -->
+    <div class="mt-4 border-t border-[#eee6d9] pt-4">
+      <h3 class="font-display text-xl font-semibold leading-snug text-[#49372d] transition-colors duration-300 group-hover:text-[#7F1D1D] sm:text-2xl">
+        {{ puisi.judul }}
+      </h3>
+    </div>
+
+    <div class="relative mt-3 flex min-h-[2rem] flex-1 flex-col border-y border-[#eee6d9] py-4">
+      <span class="absolute -top-3 left-0 bg-[#fffdf8] pr-2 font-serif text-3xl leading-none text-[#b6a587]/60" aria-hidden="true">“</span>
+      <p
+        class="mt-1 whitespace-pre-line font-serif text-sm italic leading-7 text-stone-600"
+        :class="puisi.kategori === 'Kalindaqdaq Mandar' ? 'text-center' : 'text-left'"
+      >
+        {{ puisi.isi }}
+      </p>
+      <span class="mt-auto self-end pt-2 font-serif text-3xl leading-none text-[#b6a587]/60" aria-hidden="true">”</span>
+    </div>
+
+    <div class="mt-4 flex items-center gap-3">
+      <div class="flex min-w-0 items-center gap-2.5">
+        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#eee7d9] font-display text-xs font-semibold text-[#66543b]">
+          {{ (puisi.penulis || 'S').charAt(0).toUpperCase() }}
+        </div>
+        <div class="min-w-0">
+          <p class="truncate text-xs font-semibold text-stone-700" :title="puisi.penulis">{{ puisi.penulis }}</p>
+          <p v-if="puisi.kelas" class="truncate text-[10px] text-stone-400" :title="puisi.kelas">
+            Kelas: {{ puisi.kelas }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-3 flex items-center gap-4 border-t border-[#eee6d9] pt-3">
       <button
         type="button"
         @click="emit('toggle-like', puisi.id)"
-        class="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all active:scale-95"
-        :class="isLiked
-          ? 'bg-red-50 text-red-600 border border-red-200 shadow-sm'
-          : 'bg-stone-100 text-stone-600 hover:bg-red-50 hover:text-red-600'"
-        :title="isLiked ? 'Batal apresiasi' : 'Beri apresiasi (Suka)'"
+        class="inline-flex items-center gap-1.5 text-xs text-stone-500 transition hover:text-[#7F1D1D]"
+        :class="isLiked ? 'font-semibold text-[#8f3434]' : ''"
+        :title="isLiked ? 'Batal memberi suka' : 'Sukai puisi ini'"
+        :aria-label="`${isLiked ? 'Hapus suka' : 'Sukai'}: ${puisi.likes || 0}`"
       >
-        <i
-          class="bi text-sm transition-transform duration-200"
-          :class="isLiked ? 'bi-heart-fill text-red-500 scale-110 animate-pulse' : 'bi-heart'"
-        ></i>
-        <span>{{ puisi.likes || 0 }}</span>
+        <i class="bi text-sm" :class="isLiked ? 'bi-heart-fill' : 'bi-heart'" aria-hidden="true"></i>
+        <span>{{ puisi.likes || 0 }} suka</span>
       </button>
-
-      <!-- Tombol Salin / Bagikan -->
+      <span class="text-[10px] text-stone-300" aria-hidden="true">•</span>
       <button
         type="button"
         @click="copyPuisi"
-        class="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-stone-600 hover:bg-[#7F1D1D]/10 hover:text-[#7F1D1D] transition"
-        :title="'Salin teks puisi'"
+        class="inline-flex items-center gap-1.5 text-xs text-stone-500 transition hover:text-[#6d5937]"
+        :title="copied ? 'Puisi tersalin' : 'Salin puisi'"
+        :aria-label="copied ? 'Puisi tersalin' : 'Salin puisi'"
       >
-        <i class="bi" :class="copied ? 'bi-check-lg text-emerald-600' : 'bi-copy text-[11px]'"></i>
-        <span :class="copied ? 'font-bold text-emerald-600' : ''">
-          {{ copied ? 'Tersalin!' : '' }}
-        </span>
+        <i class="bi text-sm" :class="copied ? 'bi-check2 text-emerald-700' : 'bi-copy'" aria-hidden="true"></i>
+        <span>{{ copied ? 'Tersalin' : 'Salin' }}</span>
       </button>
     </div>
-  </div>
+
+  </article>
 </template>

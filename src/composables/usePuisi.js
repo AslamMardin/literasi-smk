@@ -85,6 +85,7 @@ export function usePuisi() {
               id: key,
               judul: item.judul || 'Tanpa Judul',
               penulis: item.penulis || 'Siswa Literasi',
+              pemilikNis: String(item.pemilikNis || ''),
               kelas: item.kelas || '',
               kategori: item.kategori || 'Bebas',
               isi: item.isi || '',
@@ -116,14 +117,15 @@ export function usePuisi() {
   /**
    * Tambah karya puisi baru ke Firebase
    */
-  async function tambahPuisi({ judul, penulis, kelas, kategori, isi }) {
-    if (!judul?.trim() || !isi?.trim()) {
-      throw new Error('Judul dan isi puisi wajib diisi.')
+  async function tambahPuisi({ judul, penulis, pemilikNis, kelas, kategori, isi }) {
+    if (!judul?.trim() || !penulis?.trim() || !pemilikNis?.trim() || !isi?.trim()) {
+      throw new Error('NIS, nama penulis, judul, dan isi puisi wajib diisi.')
     }
 
     const payload = {
       judul: judul.trim(),
       penulis: penulis?.trim() || 'Siswa SMKN Campalagian',
+      pemilikNis: pemilikNis.trim(),
       kelas: kelas?.trim() || '',
       kategori: kategori || 'Bebas',
       isi: isi.trim(),
@@ -146,6 +148,49 @@ export function usePuisi() {
       }
       puisiList.value.unshift(localItem)
       return localItem.id
+    }
+  }
+
+  /**
+   * Perbarui karya puisi milik siswa yang sedang menggunakan profil ini
+   */
+  async function editPuisi(puisiId, { judul, kelas, kategori, isi }, { nis, name } = {}) {
+    if (!puisiId || !judul?.trim() || !isi?.trim()) {
+      throw new Error('Judul dan isi puisi wajib diisi.')
+    }
+
+    const target = puisiList.value.find((puisi) => puisi.id === puisiId)
+    const normalizedEditor = String(name || '').trim().toLocaleLowerCase()
+    const normalizedAuthor = String(target?.penulis || '').trim().toLocaleLowerCase()
+    const editorNis = String(nis || '').trim()
+
+    if (!target || !editorNis || editorNis !== String(target.pemilikNis || '').trim() || !normalizedEditor || normalizedEditor !== normalizedAuthor) {
+      throw new Error('NIS dan nama profil harus sama dengan identitas pemilik puisi.')
+    }
+
+    if (puisiId.startsWith('sample-')) {
+      throw new Error('Puisi contoh tidak dapat diedit.')
+    }
+
+    const changes = {
+      judul: judul.trim(),
+      kelas: kelas?.trim() || '',
+      kategori: kategori || 'Bebas & Inspirasi',
+      isi: isi.trim()
+    }
+
+    if (puisiId.startsWith('local-')) {
+      Object.assign(target, changes)
+      return
+    }
+
+    try {
+      const itemRef = dbRef(rtdb, `karya_puisi/${puisiId}`)
+      await update(itemRef, changes)
+      Object.assign(target, changes)
+    } catch (err) {
+      console.error('Gagal memperbarui puisi di Firebase:', err)
+      throw err
     }
   }
 
@@ -211,6 +256,7 @@ export function usePuisi() {
     puisiList,
     isLoading,
     tambahPuisi,
+    editPuisi,
     hapusPuisi,
     toggleLike,
     hasLiked

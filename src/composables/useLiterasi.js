@@ -2,14 +2,20 @@ import { ref, computed } from 'vue'
 import { getEbookById } from '../data/ebooks'
 
 const KEY_NAMA = 'literasi_nama_siswa'
+const KEY_NIS = 'literasi_nis_siswa'
 const KEY_KELAS = 'literasi_kelas_siswa'
 const KEY_BOOKMARKS = 'literasi_bookmarks'
 const KEY_LAST_READ = 'literasi_terakhir_dibaca'
 
 // State reaktif global (singleton di memory)
 const studentName = ref(localStorage.getItem(KEY_NAMA) || '')
+const studentNis = ref(localStorage.getItem(KEY_NIS) || '')
 const studentClass = ref(localStorage.getItem(KEY_KELAS) || '')
-const showNameModal = ref(!localStorage.getItem(KEY_NAMA))
+const showNameModal = ref(
+  !localStorage.getItem(KEY_NAMA) ||
+  !localStorage.getItem(KEY_NIS) ||
+  !localStorage.getItem(KEY_KELAS)
+)
 const bookmarks = ref([])
 const lastRead = ref(null)
 
@@ -31,13 +37,22 @@ try {
 
 export function useLiterasi() {
   const hasStudentName = computed(() => !!studentName.value.trim())
+  const hasStudentIdentity = computed(() =>
+    !!studentName.value.trim() && !!studentNis.value.trim() && !!studentClass.value.trim()
+  )
 
   /**
-   * Simpan profil siswa (nama & kelas) ke localStorage
+   * Simpan profil siswa (NIS, nama, dan kelas) ke localStorage
    */
-  function setStudentProfile({ name, kelas } = {}) {
+  function setStudentProfile({ nis, name, kelas } = {}) {
+    const cleanNis = String(nis !== undefined ? nis : studentNis.value).trim()
     const cleanName = String(name || '').trim()
     const cleanClass = String(kelas !== undefined ? kelas : '').trim()
+
+    if (cleanNis) {
+      studentNis.value = cleanNis
+      localStorage.setItem(KEY_NIS, cleanNis)
+    }
 
     if (cleanName) {
       studentName.value = cleanName
@@ -57,13 +72,14 @@ export function useLiterasi() {
   /**
    * Simpan nama & kelas siswa ke localStorage
    */
-  function setStudentName(name, kelas) {
+  function setStudentName(name, kelas, nis) {
     if (typeof name === 'object' && name !== null) {
       return setStudentProfile(name)
     }
     return setStudentProfile({
       name,
       kelas: kelas !== undefined ? kelas : studentClass.value,
+      nis: nis !== undefined ? nis : studentNis.value,
     })
   }
 
@@ -140,9 +156,11 @@ export function useLiterasi() {
 
   return {
     studentName,
+    studentNis,
     studentClass,
     studentKelas: studentClass,
     hasStudentName,
+    hasStudentIdentity,
     showNameModal,
     setStudentName,
     setStudentProfile,

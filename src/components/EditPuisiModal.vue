@@ -1,6 +1,7 @@
 ﻿<script setup>
 import { ref, watch } from 'vue'
 import { usePuisi } from '../composables/usePuisi'
+import { useLiterasi } from '../composables/useLiterasi'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -8,6 +9,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['close', 'saved'])
 const { editPuisi } = usePuisi()
+const { studentName, studentNis } = useLiterasi()
 
 const judul = ref('')
 const kelas = ref('')
@@ -25,8 +27,8 @@ const kategoriOptions = [
   'Bebas & Inspirasi'
 ]
 
-watch(() => props.puisi, (p) => {
-  if (p) {
+watch(() => [props.isOpen, props.puisi], ([isOpen, p]) => {
+  if (isOpen && p) {
     judul.value = p.judul || ''
     kelas.value = p.kelas || ''
     kategori.value = p.kategori || 'Kalindaqdaq Mandar'
@@ -43,7 +45,11 @@ async function handleSubmit() {
   if (!isi.value.trim()) { errorMessage.value = 'Isi puisi tidak boleh kosong.'; return }
   isSubmitting.value = true
   try {
-    await editPuisi(props.puisi.id, { judul: judul.value, kelas: kelas.value, kategori: kategori.value, isi: isi.value })
+    await editPuisi(
+      props.puisi.id,
+      { judul: judul.value, kelas: kelas.value, kategori: kategori.value, isi: isi.value },
+      { nis: studentNis.value, name: studentName.value }
+    )
     successMessage.value = 'Puisi berhasil diperbarui!'
     emit('saved')
     setTimeout(() => { isSubmitting.value = false; emit('close') }, 1000)
@@ -98,7 +104,6 @@ async function handleSubmit() {
           <div>
             <div class="flex items-center justify-between mb-1.5">
               <label class="text-xs font-bold text-stone-700">Isi Puisi / Bait <span class="text-red-500">*</span></label>
-              <span v-if="kategori === 'Kalindaqdaq Mandar'" class="text-[10px] text-amber-800 font-semibold bg-amber-100 px-2 py-0.5 rounded-md">Format Kalindaqdaq: 4 Baris (8-7-8-7)</span>
             </div>
             <textarea v-model="isi" rows="7" placeholder="Tuliskan bait puisi di sini..." class="w-full rounded-xl border border-stone-200 bg-stone-50/50 p-3.5 font-serif text-sm italic leading-relaxed text-stone-800 outline-none transition focus:border-[#7F1D1D] focus:bg-white focus:ring-2 focus:ring-[#7F1D1D]/10" required></textarea>
           </div>
