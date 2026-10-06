@@ -22,10 +22,32 @@ function cari() {
 
 <template>
   <section class="relative overflow-hidden bg-gradient-to-br from-[#3d1010] via-[#7F1D1D] to-[#1b0909] text-amber-50">
+    <!-- Glow elements -->
     <div class="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-amber-200/10 blur-3xl"></div>
     <div class="pointer-events-none absolute -bottom-32 -left-20 h-96 w-96 rounded-full bg-[#d7a6a6]/10 blur-3xl"></div>
 
-    <div class="relative mx-auto grid max-w-6xl items-center gap-10 px-5 pb-24 pt-14 sm:px-6 md:grid-cols-[1.1fr_1fr] md:pb-28 md:pt-20">
+    <!-- Background Gambar Diagonal Miring -->
+    <div class="pointer-events-none absolute inset-y-0 right-0 w-full md:w-[58%] overflow-hidden">
+      <!-- Container dengan efek potong miring (diagonal clip-path) -->
+      <div class="hero-diagonal relative h-full w-full">
+        <!-- Gambar Perpustakaan -->
+        <img
+          src="/smkncamplagian.PNG"
+          alt="SMKN Campalagian"
+          class="h-full w-full object-cover object-center scale-105 brightness-90"
+        />
+
+        <!-- Lapisan Warna Merah Marun & Gradient Blend agar warna merah tetap kuat & selaras -->
+        <div class="absolute inset-0 bg-[#7F1D1D]/45 mix-blend-multiply"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-[#7F1D1D]/75 via-[#7F1D1D]/45 to-[#1b0909]/70"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#1b0909]/80 via-transparent to-[#3d1010]/30"></div>
+      </div>
+
+      <!-- Garis Aksen Diagonal Tipis Emas/Amber -->
+      <div class="hero-diagonal-border pointer-events-none absolute inset-0 hidden md:block"></div>
+    </div>
+
+    <div class="relative z-10 mx-auto grid max-w-6xl items-center gap-10 px-5 pb-24 pt-14 sm:px-6 md:grid-cols-[1.1fr_1fr] md:pb-28 md:pt-20">
       <div class="animate-fade-up">
         <div class="flex items-center gap-3 sm:gap-4">
           <img
@@ -58,7 +80,7 @@ function cari() {
           v-for="(b, i) in covers"
           :key="b.id"
           :href="`#/buku/${encodeURIComponent(b.id)}`"
-          class="absolute w-44 overflow-hidden rounded-xl shadow-2xl shadow-black/50 ring-1 ring-white/20 lg:w-48 transition-all duration-300 hover:!z-30 hover:scale-110 hover:shadow-amber-500/20"
+          class="absolute w-44 overflow-hidden rounded-xl shadow-2xl shadow-black/50 ring-1 ring-white/20 lg:w-48 transition-none hover:!z-0 hover:scale-100 hover:shadow-black/50 pointer-events-none"
           :class="pos[i].animClass"
           :style="{
             left: pos[i].left,
@@ -75,6 +97,24 @@ function cari() {
 </template>
 
 <style scoped>
+/* Potongan Diagonal Miring */
+.hero-diagonal {
+  clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* Garis Aksen Tipis Bernuansa Amber Emas di Sepanjang Batas Miring */
+.hero-diagonal-border {
+  clip-path: polygon(19.6% 0%, 20.2% 0%, 0.6% 100%, 0% 100%);
+  background: linear-gradient(180deg, rgba(251, 191, 36, 0.55) 0%, rgba(217, 119, 6, 0.3) 50%, transparent 100%);
+}
+
+@media (max-width: 768px) {
+  .hero-diagonal {
+    clip-path: polygon(0% 12%, 100% 0%, 100% 100%, 0% 100%);
+    opacity: 0.35;
+  }
+}
+
 /* Animasi Melayang Buku 1 (Kiri) */
 @keyframes float-left {
   0%, 100% {
