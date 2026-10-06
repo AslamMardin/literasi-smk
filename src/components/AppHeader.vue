@@ -10,6 +10,7 @@ const { onlineCount } = useOnlinePresence()
 const links = [
   { to: '#/', key: 'home', label: 'Beranda' },
   { to: '#/koleksi', key: 'koleksi', label: 'Koleksi' },
+  { to: '#/video', key: 'video', label: 'Video' },
   { to: '#/bookmark', key: 'bookmark', label: 'Bookmark', isBookmark: true },
   { to: '#/tentang', key: 'tentang', label: 'Tentang' },
 ]
