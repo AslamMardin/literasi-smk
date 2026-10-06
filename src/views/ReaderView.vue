@@ -188,7 +188,7 @@ onBeforeUnmount(() => {
   
         <iframe
           :src="previewUrl(ebook.id)"
-          class="h-[90vh] w-full bg-white shadow-2xl"
+          class="h-[80vh] w-full bg-white shadow-2xl"
           allow="autoplay"
           title="Pratinjau Ebook"
         ></iframe>
@@ -197,7 +197,6 @@ onBeforeUnmount(() => {
   </div>
 
   <div v-else class="mx-auto max-w-xl px-5 py-24 text-center">
-    <!-- <p class="text-5xl">📚</p> -->
     <h1 class="font-display mt-4 text-2xl font-bold text-[#4a1d1d]">Ebook tidak ditemukan</h1>
     <a href="#/koleksi" class="mt-6 inline-block rounded-xl bg-[#7F1D1D] px-6 py-3 font-semibold text-amber-50">Kembali ke Koleksi</a>
   </div>
