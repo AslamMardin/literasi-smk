@@ -41,6 +41,7 @@ function formatWaktu(iso) {
 <template>
   <div>
     <HeroSection />
+    <StatsBar :ebook="ebooks.length" :kategori="daftarKategori.length" :penulis="getPenulisCount()" />
 
     <!-- Section Sapaan Siswa & Ebook Terakhir Dibaca (localStorage) -->
     <section class="mx-auto max-w-6xl px-4 sm:px-6 pt-6">
@@ -112,7 +113,6 @@ function formatWaktu(iso) {
       </div>
     </section>
 
-    <StatsBar :ebook="ebooks.length" :kategori="daftarKategori.length" :penulis="getPenulisCount()" />
 
     <EbookSection title="Ebook Terbaru" link="#/koleksi" :ebooks="terbaru" horizontal />
 

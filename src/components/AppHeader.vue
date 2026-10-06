@@ -65,7 +65,7 @@ const links = [
 
           <!-- Sapaan Nama -->
           <div class="flex flex-col text-left text-xs leading-tight">
-            <span class="text-[10px] text-stone-500 font-medium">Assalamu 'alaikuam</span>
+            <span class="text-[10px] text-stone-500 font-medium">Hai</span>
             <span class="max-w-[120px] sm:max-w-[160px] truncate font-bold text-[#7F1D1D]">
               {{ studentName }} 
             </span>

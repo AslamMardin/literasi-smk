@@ -75,7 +75,7 @@ function handleSubmit() {
                 <input
                   v-model="inputName"
                   type="text"
-                  placeholder="Contoh: Ahmad Fauzan"
+                  placeholder="Contoh: Aslam Mardin"
                   autofocus
                   required
                   class="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 pl-11 text-stone-800 placeholder-stone-400 shadow-sm focus:border-[#7F1D1D] focus:outline-none focus:ring-2 focus:ring-[#7F1D1D]/20 transition text-sm sm:text-base font-medium"
