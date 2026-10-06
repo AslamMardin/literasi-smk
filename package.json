@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "firebase": "^12.19.0",
     "pdfjs-dist": "^6.4.299",
     "pinia": "^4.0.3",
     "vue": "rc",

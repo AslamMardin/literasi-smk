@@ -1,9 +1,11 @@
 <script setup>
 import { useLiterasi } from '../composables/useLiterasi'
+import { useOnlinePresence } from '../composables/useOnlinePresence'
 
 defineProps({ active: String })
 
 const { studentName, hasStudentName, openEditNameModal, bookmarks } = useLiterasi()
+const { onlineCount } = useOnlinePresence()
 
 const links = [
   { to: '#/', key: 'home', label: 'Beranda' },
@@ -50,8 +52,22 @@ const links = [
         </nav>
       </div>
 
-      <!-- Sapaan Nama Siswa di Header -->
-      <div class="flex items-center gap-2">
+      <!-- Sapaan Nama Siswa & Live Online di Header -->
+      <div class="flex items-center gap-2 sm:gap-2.5">
+        <!-- Live Online Badge -->
+        <div
+          class="flex items-center gap-1.5 rounded-full border border-emerald-600/20 bg-emerald-50/90 px-2.5 py-1 text-xs font-semibold text-emerald-800 shadow-sm backdrop-blur transition-all"
+          title="Pengguna yang sedang online"
+        >
+          <span class="relative flex h-2 w-2">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+          </span>
+          <span class="text-[11px] sm:text-xs">
+            {{ onlineCount }} <span class="hidden sm:inline">Online</span>
+          </span>
+        </div>
+
         <div
           v-if="hasStudentName"
           class="flex items-center gap-1.5 rounded-full border border-amber-900/15 bg-white/80 py-1 pl-1.5 pr-2 sm:gap-2 md:pr-2.5 shadow-sm backdrop-blur"
