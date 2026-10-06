@@ -27,7 +27,7 @@ function cari() {
     <div class="pointer-events-none absolute -bottom-32 -left-20 h-96 w-96 rounded-full bg-[#d7a6a6]/10 blur-3xl"></div>
 
     <!-- Background Gambar Diagonal Miring -->
-    <div class="pointer-events-none absolute inset-y-0 right-0 w-full md:w-[58%] overflow-hidden">
+    <div class="hero-background pointer-events-none absolute inset-y-0 right-0 w-full md:w-[58%] overflow-hidden">
       <!-- Container dengan efek potong miring (diagonal clip-path) -->
       <div class="hero-diagonal relative h-full w-full">
         <!-- Gambar Perpustakaan -->
@@ -47,15 +47,15 @@ function cari() {
       <div class="hero-diagonal-border pointer-events-none absolute inset-0 hidden md:block"></div>
     </div>
 
-    <div class="relative z-10 mx-auto grid max-w-6xl items-center gap-10 px-5 pb-24 pt-14 sm:px-6 md:grid-cols-[1.1fr_1fr] md:pb-28 md:pt-20">
+    <div class="hero-content relative z-10 mx-auto grid max-w-6xl items-center gap-10 px-5 pb-24 pt-14 sm:px-6 md:grid-cols-[1.1fr_1fr] md:pb-28 md:pt-20">
       <div class="animate-fade-up">
         <div class="flex items-center gap-3 sm:gap-4">
           <img
             src="/favicon.png"
             alt="Logo SMKN Campalagian"
-            class="h-12 w-12 object-contain sm:h-16 sm:w-16"
+            class="hero-logo h-12 w-12 object-contain sm:h-16 sm:w-16"
           />
-          <h1 class="font-display text-2xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+          <h1 class="hero-title font-display text-2xl font-bold leading-tight sm:text-4xl lg:text-5xl">
             SMK NEGERI CAMPALAGIAN
           </h1>
         </div>
@@ -75,12 +75,12 @@ function cari() {
       </div>
 
       <!-- Sampul buku bertumpuk dengan animasi melayang (floating fly animation) bergantian -->
-      <div class="relative ml-[-3%] mx-auto h-[18rem] w-full max-w-md select-none">
+      <div class="hero-books relative ml-[-3%] mx-auto h-[18rem] w-full max-w-md select-none">
         <a
           v-for="(b, i) in covers"
           :key="b.id"
           :href="`#/buku/${encodeURIComponent(b.id)}`"
-          class="absolute w-44 overflow-hidden rounded-xl shadow-2xl shadow-black/50 ring-1 ring-white/20 lg:w-48 transition-none hover:!z-0 hover:scale-100 hover:shadow-black/50 pointer-events-none"
+          class="hero-book absolute w-44 overflow-hidden rounded-xl shadow-2xl shadow-black/50 ring-1 ring-white/20 lg:w-48 transition-none hover:!z-0 hover:scale-100 hover:shadow-black/50 pointer-events-none"
           :class="pos[i].animClass"
           :style="{
             left: pos[i].left,
@@ -112,6 +112,62 @@ function cari() {
   .hero-diagonal {
     clip-path: polygon(0% 12%, 100% 0%, 100% 100%, 0% 100%);
     opacity: 0.35;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 900px) {
+  .hero-background {
+    width: 58%;
+  }
+
+  .hero-diagonal {
+    clip-path: polygon(18% 0%, 100% 0%, 100% 100%, 0% 100%);
+    opacity: 0.55;
+  }
+
+  .hero-diagonal-border {
+    display: block;
+  }
+
+  .hero-content {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 1rem;
+    padding-top: 2.75rem;
+    padding-bottom: 4.5rem;
+  }
+
+  .hero-logo {
+    width: 3.25rem;
+    height: 3.25rem;
+  }
+
+  .hero-title {
+    font-size: clamp(1.5rem, 3.5vw, 2rem);
+    line-height: 1.1;
+  }
+
+  .hero-books {
+    height: 14rem;
+    margin-left: 0;
+  }
+
+  .hero-book {
+    width: 6rem;
+  }
+
+  .hero-book:nth-child(1) {
+    left: 0% !important;
+    top: 18% !important;
+  }
+
+  .hero-book:nth-child(2) {
+    left: 31% !important;
+    top: 4% !important;
+  }
+
+  .hero-book:nth-child(3) {
+    left: 62% !important;
+    top: 20% !important;
   }
 }
 
