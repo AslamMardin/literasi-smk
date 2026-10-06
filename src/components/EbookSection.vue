@@ -1,5 +1,7 @@
 <script setup>
 import EbookGrid from './EbookGrid.vue'
+import EbookCarousel from './EbookCarousel.vue'
+
 defineProps({
   title: String,
   link: String, // jika diisi, tampil "Lihat semua"
@@ -19,6 +21,9 @@ defineProps({
         Lihat semua →
       </a>
     </div>
-    <EbookGrid :ebooks="ebooks" :horizontal="horizontal" />
+
+    <!-- Tampilkan Carousel Center-Focus saat horizontal aktif, atau Grid standar -->
+    <EbookCarousel v-if="horizontal" :ebooks="ebooks" />
+    <EbookGrid v-else :ebooks="ebooks" />
   </section>
 </template>

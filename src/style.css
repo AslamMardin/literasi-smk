@@ -1,16 +1,50 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700;800&display=swap'); */
-
 html { scroll-behavior: smooth; }
+*, *::before, *::after {
+  font-family: 'Google Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
+  font-family: 'Google Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: #f8f1f1;
   color: #3d1c1c;
 }
-.font-display { font-family: 'Playfair Display', Georgia, serif; }
+.font-display {
+  font-family: 'Google Sans', system-ui, sans-serif;
+}
 
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-up { animation: fade-up .7s ease both; }
+
+@keyframes reveal-card {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-reveal {
+  animation: reveal-card 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+@keyframes reveal-section {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-reveal-section {
+  animation: reveal-section 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}

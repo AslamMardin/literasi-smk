@@ -27,11 +27,11 @@ defineProps({
       : 'grid grid-cols-2 gap-y-8 sm:grid-cols-3 lg:grid-cols-4'"
   >
     <div
-      v-for="e in ebooks"
+      v-for="(e, idx) in ebooks"
       :key="e.id"
       :class="horizontal ? 'w-[68vw] max-w-[240px] shrink-0 snap-start sm:w-auto sm:max-w-none' : ''"
     >
-      <EbookCard :ebook="e" />
+      <EbookCard :ebook="e" :index="idx" />
     </div>
   </div>
   <div v-else class="rounded-2xl border border-dashed border-[#7F1D1D]/20 bg-white/60 py-16 text-center text-stone-500">

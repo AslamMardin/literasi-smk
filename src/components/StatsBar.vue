@@ -3,7 +3,7 @@ defineProps({ ebook: Number, kategori: Number, penulis: Number })
 </script>
 
 <template>
-  <div class="relative z-10 mx-auto -mt-12 max-w-3xl px-5">
+  <div class="relative z-10 mx-auto -mt-12 max-w-3xl px-5 animate-reveal-section">
     <div class="grid grid-cols-3 divide-x divide-[#7F1D1D]/10 rounded-2xl bg-white py-5 shadow-xl shadow-[#7F1D1D]/10 ring-1 ring-[#7F1D1D]/5">
       <div v-for="s in [
         { n: ebook, l: 'Ebook', i: '' },

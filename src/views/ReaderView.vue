@@ -5,11 +5,13 @@ import * as pdfjsLib from 'pdfjs-dist'
 import workerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
 import { getEbookById } from '../data/ebooks'
 import { downloadUrls, previewUrl, viewUrl } from '../data/drive'
+import { useLiterasi } from '../composables/useLiterasi'
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc
 
 const props = defineProps({ id: String })
 const ebook = computed(() => getEbookById(props.id))
+const { isBookmarked, toggleBookmark, recordLastRead } = useLiterasi()
 
 const status = ref('loading') // loading | ready | fallback
 const page = ref(1)
@@ -99,6 +101,9 @@ function onResize() {
 onMounted(() => {
   window.addEventListener('keydown', onKey)
   window.addEventListener('resize', onResize)
+  if (ebook.value) {
+    recordLastRead(ebook.value)
+  }
   loadPdf()
 })
 onBeforeUnmount(() => {
@@ -121,10 +126,25 @@ onBeforeUnmount(() => {
             <a :href="`#/buku/${encodeURIComponent(ebook.id)}`" class="shrink-0 rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20">← Kembali</a>
             <a href="#/koleksi" class="hidden shrink-0 rounded-lg px-3 py-1.5 transition hover:bg-white/10 sm:block">Koleksi</a>
             <span class="font-display block max-w-[180px] truncate font-semibold md:max-w-none">
-  {{ ebook.judul }}
-</span>
+              {{ ebook.judul }}
+            </span>
           </div>
-          <!-- <a :href="viewUrl(ebook.id)" target="_blank" rel="noopener noreferrer" class="shrink-0 rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20">Buka di Drive ↗</a> -->
+
+          <!-- Tombol Bookmark Cepat di Reader -->
+          <button
+            type="button"
+            @click="toggleBookmark(ebook.id)"
+            :title="isBookmarked(ebook.id) ? 'Hapus dari Bookmark' : 'Simpan ke Bookmark'"
+            class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition"
+            :class="
+              isBookmarked(ebook.id)
+                ? 'bg-amber-400 text-amber-950 shadow'
+                : 'bg-white/10 text-white hover:bg-white/20'
+            "
+          >
+            <i class="bi" :class="isBookmarked(ebook.id) ? 'bi-bookmark-fill' : 'bi-bookmark'"></i>
+            <span>{{ isBookmarked(ebook.id) ? 'Tersimpan' : 'Bookmark' }}</span>
+          </button>
         </div>
 
         <div v-if="status === 'ready'" class="flex flex-wrap items-center justify-between gap-2">

@@ -3,12 +3,15 @@ import { computed } from 'vue'
 import BookCover from '../components/BookCover.vue'
 import EbookSection from '../components/EbookSection.vue'
 import { ebooks, getEbookById } from '../data/ebooks'
+import { useLiterasi } from '../composables/useLiterasi'
 
 const props = defineProps({ id: String })
 const ebook = computed(() => getEbookById(props.id))
 const serupa = computed(() =>
   ebooks.filter((e) => e.kategori === ebook.value?.kategori && e.id !== props.id).slice(0, 4)
 )
+
+const { isBookmarked, toggleBookmark } = useLiterasi()
 </script>
 
 <template>
@@ -19,7 +22,7 @@ const serupa = computed(() =>
       </a>
 
       <div class="mt-4 grid items-center gap-8 rounded-3xl bg-white p-6 shadow-xl shadow-[#7F1D1D]/10 ring-1 ring-[#7F1D1D]/5 sm:p-8 md:grid-cols-[260px_1fr] md:gap-12">
-        <div class="mx-auto w-48 overflow-hidden rounded-xl shadow-2xl shadow-[#7F1D1D]/30 ring-1 ring-black/10 md:w-full">
+        <div class="relative mx-auto w-48 overflow-hidden rounded-xl shadow-2xl shadow-[#7F1D1D]/30 ring-1 ring-black/10 md:w-full">
           <BookCover :ebook="ebook" />
         </div>
 
@@ -34,15 +37,35 @@ const serupa = computed(() =>
 
           <div class="mt-5 flex flex-wrap justify-center gap-2 text-xs font-medium text-[#4a1d1d] md:justify-start">
             <span class="rounded-full bg-[#7F1D1D] text-white px-3 py-1.5 ring-1 ring-[#7F1D1D]/10">PDF</span>
-
           </div>
 
-          <a
-            :href="`#/baca/${encodeURIComponent(ebook.id)}`"
-            class="animate-read-cta mt-8 inline-flex items-center gap-2 rounded-xl bg-[#7F1D1D] px-9 py-4 font-semibold text-amber-50 shadow-lg shadow-[#7F1D1D]/30 transition hover:-translate-y-0.5 hover:bg-[#5b1717]"
-          >
-            Baca Ebook
-          </a>
+          <div class="mt-8 flex flex-wrap items-center justify-center gap-3 md:justify-start">
+            <a
+              :href="`#/baca/${encodeURIComponent(ebook.id)}`"
+              class="animate-read-cta inline-flex items-center gap-2 rounded-xl bg-[#7F1D1D] px-9 py-4 font-semibold text-amber-50 shadow-lg shadow-[#7F1D1D]/30 transition hover:-translate-y-0.5 hover:bg-[#5b1717]"
+            >
+              <i class="bi bi-book-half"></i>
+              <span>Baca Ebook</span>
+            </a>
+
+            <!-- Tombol Bookmark -->
+            <button
+              type="button"
+              @click="toggleBookmark(ebook.id)"
+              class="inline-flex items-center gap-2 rounded-xl border px-6 py-4 font-semibold transition hover:-translate-y-0.5"
+              :class="
+                isBookmarked(ebook.id)
+                  ? 'border-amber-400 bg-amber-50 text-[#7F1D1D] shadow-sm'
+                  : 'border-stone-300 bg-white text-stone-700 hover:border-[#7F1D1D] hover:text-[#7F1D1D]'
+              "
+            >
+              <i
+                class="bi text-base"
+                :class="isBookmarked(ebook.id) ? 'bi-bookmark-fill text-amber-600' : 'bi-bookmark'"
+              ></i>
+              <span>{{ isBookmarked(ebook.id) ? 'Tersimpan di Bookmark' : 'Simpan Bookmark' }}</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
