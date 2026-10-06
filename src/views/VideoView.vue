@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { videos, videoCategories, parseYouTubeUrl } from '../data/videos'
 import VideoCard from '../components/VideoCard.vue'
 import VideoModal from '../components/VideoModal.vue'
+import HeroBackground from '../components/HeroBackground.vue'
 
 const searchQuery = ref('')
 const selectedCategory = ref('Semua')
@@ -64,7 +65,8 @@ function closePlayer() {
 <template>
   <div class="pb-20">
     <!-- Header Banner Video -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-[#3d1010] via-[#7F1D1D] to-[#1b0909] px-5 py-12 text-amber-50 sm:py-16 sm:px-6">
+    <section class="relative overflow-hidden bg-[#1b0909] px-5 py-12 text-amber-50 sm:py-16 sm:px-6">
+      <HeroBackground />
       <div class="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl"></div>
       <div class="pointer-events-none absolute -bottom-20 -left-20 h-72 w-72 rounded-full bg-red-400/10 blur-3xl"></div>
 

@@ -11,6 +11,7 @@ import {
 } from 'firebase/database'
 
 const KEY_LIKED_PUISI = 'literasi_liked_puisi_ids'
+const PUISI_RETENTION_MS = 30 * 24 * 60 * 60 * 1000
 
 // Contoh puisi & Kalindaqdaq awal (agar langsung berisi karya sastra indah)
 const initialSamples = [
@@ -50,6 +51,7 @@ const puisiList = ref([])
 const isLoading = ref(true)
 const likedIds = ref([])
 let isListenerActive = false
+const pendingExpiryDeletes = new Set()
 
 // Inisialisasi daftar puisi yang sudah di-like di browser ini
 try {
@@ -79,8 +81,33 @@ export function usePuisi() {
         const data = snapshot.val()
         if (data) {
           const list = []
+          const expiryCutoff = Date.now() - PUISI_RETENTION_MS
           Object.keys(data).forEach((key) => {
             const item = data[key]
+            const createdAt = Number(item.createdAt) || 0
+            if (createdAt && createdAt <= expiryCutoff) {
+              if (!pendingExpiryDeletes.has(key)) {
+                pendingExpiryDeletes.add(key)
+                remove(dbRef(rtdb, `karya_puisi/${key}`)).then(
+                  () => pendingExpiryDeletes.delete(key),
+                  (error) => {
+                    pendingExpiryDeletes.delete(key)
+                    console.error(`Gagal menghapus puisi kedaluwarsa ${key}:`, error)
+                  }
+                )
+              }
+              return
+            }
+
+            const comments = item.komentar
+              ? Object.entries(item.komentar).map(([commentId, comment]) => ({
+                  id: commentId,
+                  nama: comment.nama || 'Siswa',
+                  kelas: comment.kelas || '',
+                  isi: comment.isi || '',
+                  createdAt: Number(comment.createdAt) || 0
+                }))
+              : []
             list.push({
               id: key,
               judul: item.judul || 'Tanpa Judul',
@@ -90,7 +117,8 @@ export function usePuisi() {
               kategori: item.kategori || 'Bebas',
               isi: item.isi || '',
               likes: Number(item.likes || 0),
-              createdAt: item.createdAt || Date.now()
+              createdAt: Number(item.createdAt) || 0,
+              comments
             })
           })
           // Urutkan dari yang terbaru
@@ -148,6 +176,38 @@ export function usePuisi() {
       }
       puisiList.value.unshift(localItem)
       return localItem.id
+    }
+  }
+
+  async function tambahKomentar(puisiId, isi, { nama, kelas } = {}) {
+    const target = puisiList.value.find((puisi) => puisi.id === puisiId)
+    const cleanText = String(isi || '').trim()
+    const cleanName = String(nama || '').trim()
+
+    if (!target || !cleanName || !cleanText || cleanText.length > 500) {
+      throw new Error('Komentar harus berisi 1-500 karakter dan nama profil siswa.')
+    }
+
+    const comment = {
+      nama: cleanName,
+      kelas: String(kelas || '').trim(),
+      isi: cleanText,
+      createdAt: Date.now()
+    }
+
+    if (puisiId.startsWith('sample-') || puisiId.startsWith('local-')) {
+      target.comments ||= []
+      target.comments.push({ id: `local-comment-${Date.now()}`, ...comment })
+      return
+    }
+
+    try {
+      const commentsRef = dbRef(rtdb, `karya_puisi/${puisiId}/komentar`)
+      const newCommentRef = push(commentsRef)
+      await set(newCommentRef, { ...comment, createdAt: serverTimestamp() })
+    } catch (err) {
+      console.error('Gagal menambahkan komentar ke Firebase:', err)
+      throw new Error('Komentar gagal dikirim. Periksa koneksi lalu coba lagi.')
     }
   }
 
@@ -256,6 +316,7 @@ export function usePuisi() {
     puisiList,
     isLoading,
     tambahPuisi,
+    tambahKomentar,
     editPuisi,
     hapusPuisi,
     toggleLike,

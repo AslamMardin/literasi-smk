@@ -11,7 +11,7 @@ const props = defineProps({
   isAdmin: Boolean
 })
 
-const emit = defineEmits(['toggle-like', 'delete-puisi', 'edit-puisi'])
+const emit = defineEmits(['toggle-like', 'delete-puisi', 'edit-puisi', 'open-comments'])
 
 const copied = ref(false)
 
@@ -114,6 +114,16 @@ function formatDate(ts) {
       >
         <i class="bi text-sm" :class="isLiked ? 'bi-heart-fill' : 'bi-heart'" aria-hidden="true"></i>
         <span>{{ puisi.likes || 0 }} suka</span>
+      </button>
+      <span class="text-[10px] text-stone-300" aria-hidden="true">•</span>
+      <button
+        type="button"
+        @click="emit('open-comments', puisi)"
+        class="inline-flex items-center gap-1.5 text-xs text-stone-500 transition hover:text-[#7F1D1D]"
+        :aria-label="`Lihat ${puisi.comments?.length || 0} komentar`"
+      >
+        <i class="bi bi-chat-dots text-sm" aria-hidden="true"></i>
+        <span>{{ puisi.comments?.length || 0 }} komentar</span>
       </button>
       <span class="text-[10px] text-stone-300" aria-hidden="true">•</span>
       <button

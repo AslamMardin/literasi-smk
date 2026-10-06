@@ -1,16 +1,23 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch, nextTick, onBeforeUnmount } from 'vue'
 import { usePuisi } from '../composables/usePuisi'
 import { useLiterasi } from '../composables/useLiterasi'
 import PuisiCard from '../components/PuisiCard.vue'
 import TulisPuisiModal from '../components/TulisPuisiModal.vue'
 import EditPuisiModal from '../components/EditPuisiModal.vue'
+import HeroBackground from '../components/HeroBackground.vue'
+import PuisiCommentsModal from '../components/PuisiCommentsModal.vue'
 
 const { puisiList, isLoading, toggleLike, hasLiked, hapusPuisi } = usePuisi()
 const { studentName, studentNis, studentClass } = useLiterasi()
 
+const PAGE_SIZE = 5
+const supportsIntersectionObserver = typeof IntersectionObserver !== 'undefined'
 const searchQuery = ref('')
 const selectedCategory = ref('Semua')
+const visibleLimit = ref(PAGE_SIZE)
+const loadMoreSentinel = ref(null)
+const selectedPuisiForCommentsId = ref(null)
 const isModalOpen = ref(false)
 const isEditModalOpen = ref(false)
 const targetPuisiToEdit = ref(null)
@@ -106,12 +113,49 @@ const filteredPuisi = computed(() => {
 
   return list
 })
+
+const visiblePuisi = computed(() => filteredPuisi.value.slice(0, visibleLimit.value))
+const hasMorePuisi = computed(() => visibleLimit.value < filteredPuisi.value.length)
+const selectedPuisiForComments = computed(() =>
+  puisiList.value.find((puisi) => puisi.id === selectedPuisiForCommentsId.value) || null
+)
+
+let loadMoreObserver = null
+
+function loadMorePuisi() {
+  visibleLimit.value = Math.min(visibleLimit.value + PAGE_SIZE, filteredPuisi.value.length)
+}
+
+function observeLoadMoreSentinel(element) {
+  loadMoreObserver?.disconnect()
+  loadMoreObserver = null
+  if (!element || !supportsIntersectionObserver) return
+
+  loadMoreObserver = new IntersectionObserver((entries) => {
+    if (entries[0]?.isIntersecting) loadMorePuisi()
+  }, { rootMargin: '180px' })
+  loadMoreObserver.observe(element)
+}
+
+watch(loadMoreSentinel, observeLoadMoreSentinel, { flush: 'post' })
+watch([searchQuery, selectedCategory], async () => {
+  visibleLimit.value = PAGE_SIZE
+  await nextTick()
+  observeLoadMoreSentinel(loadMoreSentinel.value)
+})
+
+onBeforeUnmount(() => loadMoreObserver?.disconnect())
+
+function openComments(puisi) {
+  selectedPuisiForCommentsId.value = puisi.id
+}
 </script>
 
 <template>
   <div class="pb-24">
     <!-- Hero Header Banner -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-[#3d1010] via-[#7F1D1D] to-[#1b0909] px-5 py-12 text-amber-50 sm:py-16 sm:px-6">
+    <section class="relative overflow-hidden bg-[#1b0909] px-5 py-12 text-amber-50 sm:py-16 sm:px-6">
+      <HeroBackground />
       <!-- Glow Blur Decor -->
       <div class="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"></div>
       <div class="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-red-400/10 blur-3xl"></div>
@@ -181,7 +225,10 @@ const filteredPuisi = computed(() => {
       <!-- Info Hitungan & Status -->
       <div class="mt-4 flex items-center justify-between text-xs text-stone-500">
         <div class="flex items-center gap-2">
-          <span>Menampilkan <strong class="text-[#7F1D1D]">{{ filteredPuisi.length }}</strong> karya puisi</span>
+          <span>
+            Menampilkan <strong class="text-[#7F1D1D]">{{ visiblePuisi.length }}</strong>
+            dari <strong class="text-[#7F1D1D]">{{ filteredPuisi.length }}</strong> karya puisi
+          </span>
          
         </div>
         <button
@@ -199,19 +246,38 @@ const filteredPuisi = computed(() => {
       </div>
 
       <!-- Grid Kartu Puisi -->
-      <div v-else-if="filteredPuisi.length > 0" class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <PuisiCard
-          v-for="p in filteredPuisi"
-          :key="p.id"
-          :puisi="p"
-          :is-liked="hasLiked(p.id)"
-          :is-owner="isPuisiOwner(p) && !p.id.startsWith('sample-')"
-          :is-admin="isAdmin"
-          @toggle-like="toggleLike"
-          @edit-puisi="openEditModal"
-          @delete-puisi="openDeleteModal"
-        />
-      </div>
+      <template v-else-if="filteredPuisi.length > 0">
+        <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <PuisiCard
+            v-for="p in visiblePuisi"
+            :key="p.id"
+            :puisi="p"
+            :is-liked="hasLiked(p.id)"
+            :is-owner="isPuisiOwner(p) && !p.id.startsWith('sample-')"
+            :is-admin="isAdmin"
+            @toggle-like="toggleLike"
+            @edit-puisi="openEditModal"
+            @delete-puisi="openDeleteModal"
+            @open-comments="openComments"
+          />
+        </div>
+        <div
+          v-if="hasMorePuisi"
+          ref="loadMoreSentinel"
+          class="mt-8 flex justify-center py-4 text-xs text-stone-400"
+          aria-live="polite"
+        >
+          <button
+            v-if="!supportsIntersectionObserver"
+            type="button"
+            class="rounded-xl bg-white px-4 py-2 font-semibold text-[#7F1D1D] shadow-sm"
+            @click="loadMorePuisi"
+          >
+            Muat 5 puisi lagi
+          </button>
+          <span v-else>Gulir untuk melihat karya lainnya</span>
+        </div>
+      </template>
 
       <!-- Empty State -->
       <div v-else class="mt-12 flex flex-col items-center justify-center rounded-3xl bg-white p-10 text-center shadow-sm ring-1 ring-stone-200/60">
@@ -245,6 +311,12 @@ const filteredPuisi = computed(() => {
       :is-open="isEditModalOpen"
       :puisi="targetPuisiToEdit"
       @close="isEditModalOpen = false"
+    />
+
+    <PuisiCommentsModal
+      :is-open="!!selectedPuisiForComments"
+      :puisi="selectedPuisiForComments"
+      @close="selectedPuisiForCommentsId = null"
     />
 
     <!-- Modal Konfirmasi Hapus Puisi (Khusus Aslam Mardin) -->

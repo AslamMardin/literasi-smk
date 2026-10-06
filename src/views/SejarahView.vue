@@ -6,6 +6,7 @@ import {
   getSejarahById,
   getFeaturedSejarah
 } from '../data/sejarah'
+import HeroBackground from '../components/HeroBackground.vue'
 
 const props = defineProps({
   id: String
@@ -210,15 +211,12 @@ function formatMarkdown(text) {
     <!-- JIKA MODE DAFTAR BLOG ENSIKLOPEDIA -->
     <div v-else>
       <!-- Hero Header Banner -->
-      <section class="relative overflow-hidden bg-gradient-to-br from-[#3d1010] via-[#7F1D1D] to-[#1b0909] px-5 py-12 text-amber-50 sm:py-16 sm:px-6">
+      <section class="relative overflow-hidden bg-[#1b0909] px-5 py-12 text-amber-50 sm:py-16 sm:px-6">
+        <HeroBackground />
         <div class="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-amber-400/10 blur-3xl"></div>
         <div class="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-red-400/10 blur-3xl"></div>
 
         <div class="relative z-10 mx-auto max-w-5xl text-center">
-          <div class="inline-flex items-center gap-2 rounded-full border border-amber-300/30 bg-amber-300/10 px-3.5 py-1 text-xs font-semibold text-amber-200 backdrop-blur mb-3">
-            <i class="bi bi-hourglass-split text-amber-300"></i>
-            <span>Ensiklopedia & Catatan Sejarah Mandar</span>
-          </div>
 
           <h1 class="font-display text-2xl font-bold tracking-tight sm:text-4xl">
             Jejak Sejarah & Peradaban Mandar
