@@ -7,7 +7,7 @@ import PageHeader from '../components/PageHeader.vue'
 const pengurusKegiatan = [
   { jabatan: 'Pembina', nama: 'Rasjuddin, S.Pd.I., MM.', foto: '/people/kepsek.PNG' },
   { jabatan: 'Ketua', nama: 'Abrianto Yasin, S.Pd.', foto: '/people/abi.jpeg' },
-  { jabatan: 'Sekretaris', nama: 'Aslam Mardin, S.Kom., M.Kom., Gr.', foto: '/people/2023-2.jpg' },
+  { jabatan: 'Sekretaris', nama: 'Aslam Mardin, S.Kom., M.Kom.', foto: '/people/2023-2.jpg' },
   { jabatan: 'Bendahara', nama: 'Nisrawati, S.Pd.I', foto: '/images/avatar-bendahara.svg' },
   { jabatan: 'Koordinator Materi', nama: 'Andi Reski Tappawali, S.Pd', foto: '/images/avatar-koordinator.svg' }
 ]
@@ -322,22 +322,7 @@ const fotoPenciptaGagal = ref(false)
 
           <!-- Detail Informasi Pencipta -->
           <div class="p-6 sm:p-8 space-y-8 bg-[#fffdfb]">
-            <!-- Bidang Keahlian -->
-            <div>
-              <h4 class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-3 flex items-center gap-2">
-                <span>Bidang Keahlian</span>
-              </h4>
-              <div class="flex flex-wrap gap-2">
-                <span
-                  v-for="k in keahlianPencipta"
-                  :key="k.nama"
-                  class="inline-flex items-center gap-1.5 rounded-xl border border-stone-200 bg-white px-3 py-1.5 text-xs font-semibold text-stone-700 shadow-2xs hover:border-[#7F1D1D]/30 hover:text-[#7F1D1D] transition"
-                >
-                  <i :class="`bi ${k.icon} text-amber-700`"></i>
-                  <span>{{ k.nama }}</span>
-                </span>
-              </div>
-            </div>
+          
 
             <!-- Visi Karya (2 Kolom) -->
               <div class="md:col-span-2 rounded-2xl bg-amber-50/50 border border-amber-200/50 p-5">
