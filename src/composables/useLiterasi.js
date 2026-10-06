@@ -2,11 +2,13 @@ import { ref, computed } from 'vue'
 import { getEbookById } from '../data/ebooks'
 
 const KEY_NAMA = 'literasi_nama_siswa'
+const KEY_KELAS = 'literasi_kelas_siswa'
 const KEY_BOOKMARKS = 'literasi_bookmarks'
 const KEY_LAST_READ = 'literasi_terakhir_dibaca'
 
 // State reaktif global (singleton di memory)
 const studentName = ref(localStorage.getItem(KEY_NAMA) || '')
+const studentClass = ref(localStorage.getItem(KEY_KELAS) || '')
 const showNameModal = ref(!localStorage.getItem(KEY_NAMA))
 const bookmarks = ref([])
 const lastRead = ref(null)
@@ -31,14 +33,38 @@ export function useLiterasi() {
   const hasStudentName = computed(() => !!studentName.value.trim())
 
   /**
-   * Simpan nama siswa ke localStorage
+   * Simpan profil siswa (nama & kelas) ke localStorage
    */
-  function setStudentName(name) {
-    const clean = String(name || '').trim()
-    if (!clean) return
-    studentName.value = clean
-    localStorage.setItem(KEY_NAMA, clean)
+  function setStudentProfile({ name, kelas } = {}) {
+    const cleanName = String(name || '').trim()
+    const cleanClass = String(kelas !== undefined ? kelas : '').trim()
+
+    if (cleanName) {
+      studentName.value = cleanName
+      localStorage.setItem(KEY_NAMA, cleanName)
+    }
+
+    studentClass.value = cleanClass
+    if (cleanClass) {
+      localStorage.setItem(KEY_KELAS, cleanClass)
+    } else {
+      localStorage.removeItem(KEY_KELAS)
+    }
+
     showNameModal.value = false
+  }
+
+  /**
+   * Simpan nama & kelas siswa ke localStorage
+   */
+  function setStudentName(name, kelas) {
+    if (typeof name === 'object' && name !== null) {
+      return setStudentProfile(name)
+    }
+    return setStudentProfile({
+      name,
+      kelas: kelas !== undefined ? kelas : studentClass.value,
+    })
   }
 
   /**
@@ -114,9 +140,12 @@ export function useLiterasi() {
 
   return {
     studentName,
+    studentClass,
+    studentKelas: studentClass,
     hasStudentName,
     showNameModal,
     setStudentName,
+    setStudentProfile,
     openEditNameModal,
     closeNameModal,
     bookmarks,

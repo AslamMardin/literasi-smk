@@ -2,21 +2,26 @@
 import { ref, watch } from 'vue'
 import { useLiterasi } from '../composables/useLiterasi'
 
-const { studentName, showNameModal, setStudentName, closeNameModal, hasStudentName } = useLiterasi()
+const { studentName, studentClass, showNameModal, setStudentProfile, closeNameModal, hasStudentName } = useLiterasi()
 
 const inputName = ref(studentName.value || '')
+const inputClass = ref(studentClass.value || '')
 
-// Sinkronkan input dengan studentName saat modal dibuka
+// Sinkronkan input dengan state saat modal dibuka
 watch(showNameModal, (open) => {
   if (open) {
     inputName.value = studentName.value || ''
+    inputClass.value = studentClass.value || ''
   }
 })
 
 function handleSubmit() {
-  const val = inputName.value.trim()
-  if (!val) return
-  setStudentName(val)
+  const valName = inputName.value.trim()
+  if (!valName) return
+  setStudentProfile({
+    name: valName,
+    kelas: inputClass.value.trim()
+  })
 }
 </script>
 
@@ -51,14 +56,14 @@ function handleSubmit() {
 
           <div class="flex items-center gap-3.5">
             <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-amber-400 text-3xl text-amber-950 shadow-md">
-              <i class="bi bi-person-lines-fill"></i>
+              <i class="bi bi-person-badge-fill"></i>
             </div>
             <div>
               <h3 class="font-display text-xl sm:text-2xl font-bold leading-tight">
-                {{ hasStudentName ? 'Ubah Nama Siswa' : 'Selamat Datang!' }}
+                {{ hasStudentName ? 'Ubah Profil Siswa' : 'Selamat Datang!' }}
               </h3>
               <p class="text-xs text-amber-200/90 mt-1">
-                {{ hasStudentName ? 'Perbarui nama panggilanmu' : 'Siapa nama lengkap atau panggilanmu?' }}
+                {{ hasStudentName ? 'Perbarui nama & kelas Anda' : 'Lengkapi nama dan kelas untuk membaca & berkarya' }}
               </p>
             </div>
           </div>
@@ -67,9 +72,10 @@ function handleSubmit() {
         <!-- Body Form -->
         <div class="p-6 sm:p-7">
           <form @submit.prevent="handleSubmit" class="space-y-4">
+            <!-- Input Nama Siswa -->
             <div>
               <label class="block text-xs font-bold uppercase tracking-wider text-[#7F1D1D]/80 mb-2">
-                Nama Siswa
+                Nama Siswa <span class="text-red-500">*</span>
               </label>
               <div class="relative">
                 <input
@@ -84,7 +90,24 @@ function handleSubmit() {
                   <i class="bi bi-person-fill text-lg"></i>
                 </span>
               </div>
-             
+            </div>
+
+            <!-- Input Kelas / Jurusan -->
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-[#7F1D1D]/80 mb-2">
+                Kelas & Jurusan <span class="text-stone-400 font-normal lowercase">(Opsional)</span>
+              </label>
+              <div class="relative">
+                <input
+                  v-model="inputClass"
+                  type="text"
+                  placeholder="Contoh: X RPL 1 / XI TKJ / XII TBSM"
+                  class="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 pl-11 text-stone-800 placeholder-stone-400 shadow-sm focus:border-[#7F1D1D] focus:outline-none focus:ring-2 focus:ring-[#7F1D1D]/20 transition text-sm sm:text-base font-medium"
+                />
+                <span class="absolute left-4 top-3.5 text-stone-400">
+                  <i class="bi bi-mortarboard-fill text-lg"></i>
+                </span>
+              </div>
             </div>
 
             <div class="pt-2 flex items-center gap-2">

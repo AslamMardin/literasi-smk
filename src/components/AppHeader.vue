@@ -4,13 +4,13 @@ import { useOnlinePresence } from '../composables/useOnlinePresence'
 
 defineProps({ active: String })
 
-const { studentName, hasStudentName, openEditNameModal, bookmarks } = useLiterasi()
+const { studentName, studentClass, hasStudentName, openEditNameModal, bookmarks } = useLiterasi()
 const { onlineCount } = useOnlinePresence()
 
 const links = [
   { to: '#/', key: 'home', label: 'Beranda', icon: 'bi-house-door-fill' },
   { to: '#/koleksi', key: 'koleksi', label: 'Koleksi', icon: 'bi-book-half' },
-  { to: '#/sejarah', key: 'sejarah', label: 'Sejarah', icon: 'bi-hourglass-split' },
+  { to: '#/sejarah', key: 'sejarah', label: 'Sejarah', icon: 'bi-globe-americas'},
   { to: '#/video', key: 'video', label: 'Video', icon: 'bi-play-btn-fill' },
   { to: '#/puisi', key: 'puisi', label: 'Puisi', icon: 'bi-feather' },
   { to: '#/bookmark', key: 'bookmark', label: 'Bookmark', icon: 'bi-bookmark-heart-fill', isBookmark: true },
@@ -27,7 +27,7 @@ const links = [
             <img src="/logo.png" alt="Logo Literasi" class="h-full w-full object-contain">
           </span>
           <span class="font-display hidden whitespace-nowrap text-base font-bold text-[#7F1D1D] sm:inline md:text-lg">
-            Literasi SMK
+            Literasi
           </span>
         </a>
 
@@ -73,7 +73,7 @@ const links = [
             <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
           </span>
           <span class="text-[11px] sm:text-xs">
-            {{ onlineCount }} <span class="hidden sm:inline">Online</span>
+            {{ onlineCount }} <span class="hidden sm:inline"><i class="bi bi-person-fill"></i></span>
           </span>
         </div>
 
@@ -88,19 +88,22 @@ const links = [
             {{ studentName.charAt(0).toUpperCase() }}
           </div>
 
-          <!-- Sapaan Nama -->
+          <!-- Sapaan Nama & Kelas -->
           <div class="flex flex-col text-left text-xs leading-tight">
-            <span class="text-[10px] text-stone-500 font-medium">Hai</span>
-            <span class="max-w-[85px] truncate font-bold text-[#7F1D1D] sm:max-w-[110px] md:max-w-[160px]">
+             <span class="max-w-[85px] truncate font-bold text-[#7F1D1D] sm:max-w-[110px] md:max-w-[150px]">
               {{ studentName }} 
             </span>
+            <span class="text-[10px] text-stone-500 font-medium">
+          {{ studentClass ? `${studentClass}` : '' }}
+            </span>
+           
           </div>
 
-          <!-- Tombol Ubah Nama -->
+          <!-- Tombol Ubah Profil -->
           <button
             type="button"
             @click="openEditNameModal"
-            title="Ubah nama siswa"
+            title="Ubah profil siswa (nama & kelas)"
             class="ml-1 rounded-full p-1 text-stone-400 hover:bg-[#7F1D1D]/10 hover:text-[#7F1D1D] transition"
           >
             <i class="bi bi-pencil-square text-xs"></i>

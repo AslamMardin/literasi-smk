@@ -9,12 +9,12 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'published'])
 
-const { studentName, setStudentName } = useLiterasi()
+const { studentName, studentClass, setStudentProfile, setStudentName } = useLiterasi()
 const { tambahPuisi } = usePuisi()
 
 const judul = ref('')
 const penulis = ref(studentName.value || '')
-const kelas = ref('')
+const kelas = ref(studentClass.value || '')
 const kategori = ref('Kalindaqdaq Mandar')
 const isi = ref('')
 
@@ -36,6 +36,9 @@ watch(
     if (val) {
       if (!penulis.value && studentName.value) {
         penulis.value = studentName.value
+      }
+      if (!kelas.value && studentClass.value) {
+        kelas.value = studentClass.value
       }
       errorMessage.value = ''
       successMessage.value = ''
@@ -65,9 +68,12 @@ async function handleSubmit() {
   isSubmitting.value = true
 
   try {
-    // Simpan juga nama penulis ke setting nama siswa jika belum ada
-    if (!studentName.value) {
-      setStudentName(penulis.value.trim())
+    // Simpan juga nama penulis & kelas ke setting profil siswa jika belum lengkap
+    if (!studentName.value || (!studentClass.value && kelas.value.trim())) {
+      setStudentProfile({
+        name: penulis.value.trim(),
+        kelas: kelas.value.trim()
+      })
     }
 
     await tambahPuisi({
@@ -84,7 +90,8 @@ async function handleSubmit() {
     // Reset form setelah 1 detik lalu tutup
     setTimeout(() => {
       judul.value = ''
-      kelas.value = ''
+      penulis.value = studentName.value || ''
+      kelas.value = studentClass.value || ''
       isi.value = ''
       isSubmitting.value = false
       emit('close')
@@ -211,9 +218,7 @@ async function handleSubmit() {
               <label class="text-xs font-bold text-stone-700">
                 Isi Puisi / Bait <span class="text-red-500">*</span>
               </label>
-              <span v-if="kategori === 'Kalindaqdaq Mandar'" class="text-[10px] text-amber-800 font-semibold bg-amber-100 px-2 py-0.5 rounded-md">
-                Format Kalindaqdaq: 4 Baris (8-7-8-7)
-              </span>
+              
             </div>
             <textarea
               v-model="isi"

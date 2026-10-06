@@ -2,23 +2,20 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import PageHeader from '../components/PageHeader.vue'
 
-const tujuan = [
-  {
-    icon: 'bi-hourglass-bottom',
-    title: 'Membiasakan Membaca',
-    text: 'Mendorong siswa untuk menjadikan membaca sebagai kebiasaan positif dan menyenangkan setiap hari.'
-  },
-  {
-    icon: 'bi-phone-landscape',
-    title: 'Akses Fleksibel',
-    text: 'Koleksi bacaan dapat dibuka kapan saja melalui HP, tablet, maupun laptop siswa.'
-  },
-  {
-    icon: 'bi-house-fill',
-    title: 'Satu Ruang Terpadu',
-    text: 'Ratusan ebook berkualitas dikumpulkan dalam satu platform terpadu yang mudah dijelajahi.'
-  }
+
+
+const pengurusKegiatan = [
+  { jabatan: 'Pembina', nama: 'Rasjuddin, S.Pd.I., MM.', foto: '/people/kepsek.PNG' },
+  { jabatan: 'Ketua', nama: 'Abrianto Yasin, S.Pd.', foto: '/images/avatar-ketua.svg' },
+  { jabatan: 'Sekretaris', nama: 'Aslam Mardin, S.Kom., M.Kom., Gr.', foto: '/people/2023-2.jpg' },
+  { jabatan: 'Bendahara', nama: 'Nisrawati, S.Pd.I', foto: '/images/avatar-bendahara.svg' },
+  { jabatan: 'Koordinator Materi', nama: 'Andi Reski Tappawali, S.Pd', foto: '/images/avatar-koordinator.svg' }
 ]
+
+const siswaTerlibat = Array.from({ length: 12 }, (_, index) => ({
+  id: index + 1,
+  nama: `Nama Siswa ${String(index + 1).padStart(2, '0')}`
+}))
 
 const kategoriGaleri = ['Semua', 'Kegiatan Baca', 'Perpustakaan', 'Literasi Digital']
 const kategoriTerpilih = ref('Semua')
@@ -122,48 +119,151 @@ onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleKeydown)
   document.body.style.overflow = ''
 })
+const keahlianPencipta = [
+  { nama: 'Web Development', icon: 'bi-code-slash' },
+  { nama: 'UI & Web Design', icon: 'bi-palette-fill' },
+  { nama: 'Graphic Design', icon: 'bi-brush-fill' },
+  { nama: 'Jaringan', icon: 'bi-hdd-network-fill' },
+  { nama: 'Computer Service', icon: 'bi-cpu-fill' },
+  { nama: 'Data Analysis', icon: 'bi-graph-up' },
+  { nama: 'Teknologi Pendidikan', icon: 'bi-mortarboard-fill' }
+]
+
+const teknologiPencipta = [
+  'Vue.js', 'JavaScript', 'PHP', 'Laravel', 'HTML5 & CSS3',
+  'Bootstrap', 'Python', 'MySQL', 'Firebase', 'Flutter',
+  'Figma', 'Canva', 'CorelDRAW', 'Git & GitHub', 'Machine Learning'
+]
+
+const riwayatPendidikan = [
+  {
+    jenjang: 'Magister Sistem Komputer (S2)',
+    institusi: 'Universitas Handayani Makassar',
+    periode: '2023 – 2025',
+    icon: 'bi-mortarboard-fill'
+  },
+  {
+    jenjang: 'Sarjana Komputer (S1) & Pendidik (Gr.)',
+    institusi: 'Universitas Al Asyariah Mandar / STAIN Majene',
+    periode: '2015 – 2018',
+    icon: 'bi-award-fill'
+  }
+]
+
+const pengalamanPencipta = [
+  {
+    peran: 'Pendidik & Praktisi TI',
+    tempat: 'TK Al-Ittihad & SMK di Sulawesi Barat',
+    waktu: '2019 – Sekarang'
+  },
+  {
+    peran: 'Penanggung Jawab Media Center',
+    tempat: 'PPM Al-Ikhlash Lampoko',
+    waktu: '2023'
+  },
+  {
+    peran: 'Olimpiade APJI Mikrotik Nasional',
+    tempat: 'Tingkat Nasional di Makassar',
+    waktu: '2016'
+  }
+]
+
+const prinsipPencipta = [
+  {
+    quote: 'Jangan terlalu memikirkan uang, kalau ada pengeluaranmu, adaji itu rezeki.',
+    tokoh: 'Abidin'
+  },
+  {
+    quote: 'Lanjut miki S2. Jangan terlalu putus asa jika gagal, begitu memang dunia.',
+    tokoh: 'Mardawiah'
+  }
+]
+
+const fotoPenciptaGagal = ref(false)
 </script>
 
 <template>
   <div>
     <PageHeader
       title="Tentang Gerakan Sulbar Madarras (GSM)"
-      subtitle="Ruang baca digital SMKN Campalagian."
+      subtitle="Ruang baca digital dan pusat literasi terpadu SMKN Campalagian."
     />
 
     <main class="mx-auto max-w-6xl px-5 py-12 sm:px-6 space-y-16">
-      <!-- 1. Pengantar & Profil Singkat -->
+      <!-- 1. Pengantar & Profil Singkat Gerakan Literasi -->
       <section class="rounded-3xl border border-amber-900/10 bg-white p-6 sm:p-10 shadow-sm">
         <div class="max-w-3xl">
-         
+          
           <h2 class="font-display text-2xl sm:text-3xl font-bold text-[#4a1d1d] leading-tight">
             Membangun Budaya Gemar Membaca di Era Digital
           </h2>
           <p class="mt-4 text-base leading-relaxed text-stone-600">
             Literasi Digital SMKN Campalagian merupakan inisiatif ruang baca modern yang
-            menyediakan berbagai koleksi ebook berkualitas untuk mendukung kegiatan belajar
-            dan memperkaya wawasan seluruh siswa. Website ini dirancang agar bahan bacaan
-            dapat diakses kapan saja dan di mana saja dengan mudah.
+            menyediakan berbagai koleksi ebook berkualitas, dokumentasi sejarah Mandar, dan karya sastra puisi siswa
+            untuk mendukung kegiatan belajar dan memperkaya wawasan seluruh warga sekolah.
           </p>
         </div>
 
-        <!-- 3 Pilar Tujuan -->
-        <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3 pt-6 border-t border-stone-100">
-          <div
-            v-for="t in tujuan"
-            :key="t.title"
-            class="rounded-2xl border border-stone-200/60 bg-[#fdfbfb] p-5 transition hover:-translate-y-1 hover:shadow-md"
+       
+      </section>
+
+      <!-- Struktur pengurus dan siswa yang terlibat -->
+      <section class="space-y-6">
+        <div>
+          <h2 class="font-display text-2xl sm:text-3xl font-bold text-[#4a1d1d]">
+            Struktur GSM
+          </h2>
+          <div class="mt-2 h-1 w-12 rounded-full bg-[#d97706]"></div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <article
+            v-for="pengurus in pengurusKegiatan"
+            :key="pengurus.jabatan"
+            class="rounded-2xl border border-amber-900/10 bg-white p-5 shadow-sm"
           >
-            <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-[#7F1D1D] text-amber-100 text-lg shadow-sm">
-              <i :class="`bi ${t.icon}`"></i>
+            <div class="h-20 w-20 overflow-hidden rounded-2xl bg-amber-50 ring-1 ring-amber-900/10">
+              <img
+                :src="pengurus.foto"
+                :alt="`Ilustrasi avatar ${pengurus.jabatan}`"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              >
             </div>
-            <h3 class="font-display mt-4 font-bold text-stone-900 text-base">{{ t.title }}</h3>
-            <p class="mt-1.5 text-xs sm:text-sm text-stone-500 leading-relaxed">{{ t.text }}</p>
+            <p class="mt-4 text-xs font-bold uppercase tracking-wider text-stone-500">
+              {{ pengurus.jabatan }}
+            </p>
+            <h3 class="mt-1 font-display text-lg font-bold text-stone-900">
+              {{ pengurus.nama }}
+            </h3>
+          </article>
+        </div>
+
+        <div class="rounded-2xl border border-amber-900/10 bg-white p-5 sm:p-6 shadow-sm">
+          <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <h3 class="font-display text-lg font-bold text-[#4a1d1d]">
+              Siswa yang Terlibat
+            </h3>
+            <span class="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-900">
+              {{ siswaTerlibat.length }} siswa
+            </span>
           </div>
+          <ol class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            <li
+              v-for="siswa in siswaTerlibat"
+              :key="siswa.id"
+              class="flex items-center gap-3 rounded-xl bg-[#fffdfb] px-3 py-2.5 text-sm text-stone-700 ring-1 ring-stone-200/70"
+            >
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#7F1D1D]/10 text-xs font-bold text-[#7F1D1D]">
+                {{ String(siswa.id).padStart(2, '0') }}
+              </span>
+              <span>{{ siswa.nama }}</span>
+            </li>
+          </ol>
         </div>
       </section>
 
-      <!-- 2. Galeri Foto Dokumentasi Kegiatan Literasi -->
+      <!-- Galeri Foto Dokumentasi Kegiatan Literasi -->
       <section class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
@@ -193,9 +293,11 @@ onBeforeUnmount(() => {
 
             <!-- Badge Kategori Pojok Kiri Atas -->
             <div class="absolute top-3 left-3 z-10">
-              <span class="rounded-full bg-black/60 backdrop-blur-md px-3 py-1 text-[11px] font-semibold text-amber-200 shadow-sm">
-                {{ item.kategori }}
-              </span>
+              <!-- Tombol Zoom Icon -->
+              <div class="mt-3 flex text-white shadow-text  items-center gap-1 text-xs font-semibold text-amber-300 opacity-0 transform translate-y-2 transition duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+                <i class="bi bi-zoom-in"></i>
+                <span>Klik untuk perbesar</span>
+              </div>
             </div>
 
             <!-- Overlay & Keterangan Saat Hover -->
@@ -207,16 +309,97 @@ onBeforeUnmount(() => {
               <h3 class="font-display font-bold text-base sm:text-lg leading-snug text-white group-hover:text-amber-200 transition">
                 {{ item.judul }}
               </h3>
-              <p class="mt-1 line-clamp-2 text-xs text-stone-300/90 leading-relaxed">
-                {{ item.deskripsi }}
-              </p>
 
-              <!-- Tombol Zoom Icon -->
-              <div class="mt-3 flex items-center gap-1 text-xs font-semibold text-amber-300 opacity-0 transform translate-y-2 transition duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-                <i class="bi bi-zoom-in"></i>
-                <span>Klik untuk perbesar</span>
+             
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Profil Pencipta Aplikasi -->
+      <section class="space-y-6">
+        <div>
+          <h2 class="font-display text-2xl sm:text-3xl font-bold text-[#4a1d1d]">
+            Tentang Pencipta
+          </h2>
+          <div class="mt-2 h-1 w-12 rounded-full bg-[#d97706]"></div>
+        </div>
+
+        <div class="overflow-hidden rounded-3xl border border-amber-900/15 bg-white shadow-md">
+          <!-- Banner Profil Atas -->
+          <div class="relative bg-gradient-to-br from-[#3d1010] via-[#7F1D1D] to-[#991b1b] p-6 sm:p-10 text-amber-50">
+            <!-- Background Glow Decor -->
+            <div class="pointer-events-none absolute right-0 top-0 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl"></div>
+
+            <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
+              <!-- Foto Profil -->
+              <div class="relative flex h-24 w-24 sm:h-28 sm:w-28 shrink-0 items-center justify-center overflow-hidden rounded-3xl bg-gradient-to-tr from-amber-400 to-amber-200 text-3xl sm:text-4xl font-extrabold text-[#4a1010] shadow-xl ring-4 ring-white/20">
+                <img
+                  v-if="!fotoPenciptaGagal"
+                  src="https://aslammardin.github.io/img/accan.png"
+                  alt="Foto Aslam Mardin"
+                  class="h-full w-full object-cover object-center"
+                  loading="lazy"
+                  @error="fotoPenciptaGagal = true"
+                >
+                <span v-else aria-hidden="true">AM</span>
+                
+              </div>
+
+              <!-- Identitas Utama -->
+              <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                  <span class="rounded-full bg-amber-400/20 border border-amber-300/30 px-3 py-0.5 text-xs font-bold text-amber-200">
+                    Dosen Informatika 
+                  </span>
+                  <span class="inline-flex items-center gap-1 text-xs text-amber-100/80">
+                    <i class="bi bi-geo-alt-fill text-amber-400"></i> Campalagian, Polewali Mandar
+                  </span>
+                </div>
+
+                <h3 class="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                  Aslam Mardin, S.Kom., M.Kom., Gr.
+                </h3>
+
+                <p class="mt-2.5 text-xs sm:text-sm text-amber-100/90 leading-relaxed max-w-3xl">
+                  Berasal dari Desa Bonde, Kecamatan Campalagian, Polewali Mandar. Menempuh pendidikan studi S1 di Universitas Al Asyariah Mandar tahun 2023 dan program magister di Universitas Handayani Makassar tahun 2025, serta aktif mengembangkan diri di bidang pendidikan dan teknologi informasi.
+                </p>
               </div>
             </div>
+          </div>
+
+          <!-- Detail Informasi Pencipta -->
+          <div class="p-6 sm:p-8 space-y-8 bg-[#fffdfb]">
+            <!-- Bidang Keahlian -->
+            <div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-3 flex items-center gap-2">
+                <span>Bidang Keahlian</span>
+              </h4>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  v-for="k in keahlianPencipta"
+                  :key="k.nama"
+                  class="inline-flex items-center gap-1.5 rounded-xl border border-stone-200 bg-white px-3 py-1.5 text-xs font-semibold text-stone-700 shadow-2xs hover:border-[#7F1D1D]/30 hover:text-[#7F1D1D] transition"
+                >
+                  <i :class="`bi ${k.icon} text-amber-700`"></i>
+                  <span>{{ k.nama }}</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Visi Karya (2 Kolom) -->
+              <div class="md:col-span-2 rounded-2xl bg-amber-50/50 border border-amber-200/50 p-5">
+                <div class="flex items-center gap-2 text-[#7F1D1D] font-bold text-xs uppercase tracking-wider mb-2">
+                  <i class="bi bi-compass-fill"></i>
+                  <span>Visi di Balik Karya Ini</span>
+                </div>
+                <p class="text-xs sm:text-sm text-stone-700 leading-relaxed">
+                  Aplikasi ini merupakan salah satu bentuk pemanfaatan teknologi dalam mendukung budaya literasi, khususnya dalam mengenalkan dan mendokumentasikan pengetahuan serta sejarah lokal Mandar. Melalui karya ini, teknologi tidak hanya menjadi alat komputasi, tetapi juga media penjaga tradisi dan pengetahuan bagi generasi penerus.
+                </p>
+                <div class="mt-3 flex items-center gap-2 text-xs font-bold text-[#7F1D1D]">
+                  <span>"Memajukan literasi dan pendidikan Sulawesi Barat."</span>
+                </div>
+              </div>
           </div>
         </div>
       </section>

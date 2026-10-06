@@ -69,13 +69,13 @@ function closePlayer() {
       <div class="pointer-events-none absolute -bottom-20 -left-20 h-72 w-72 rounded-full bg-red-400/10 blur-3xl"></div>
 
       <div class="relative z-10 mx-auto max-w-5xl text-center">
-        <div class="inline-flex items-center gap-2 rounded-full border border-amber-300/30 bg-amber-300/10 px-3.5 py-1 text-xs font-semibold text-amber-200 backdrop-blur mb-3">
-          <i class="bi bi-play-btn-fill text-red-400" style="font-size: 4rem;"></i>
+        <div class="inline-flex items-center gap-2  px-3.5 py-1 text-xs font-semibold text-amber-200 backdrop-blur mb-3">
+          <i class="bi bi-play-btn-fill text-white" style="font-size: 4rem;"></i>
         </div>
 
-        <h1 class="font-display text-2xl font-bold tracking-tight sm:text-4xl">
+        <!-- <h1 class="font-display text-2xl font-bold tracking-tight sm:text-4xl">
           Video Literasi & Edukasi SMK
-        </h1>
+        </h1> -->
         <p class="mx-auto mt-2 max-w-2xl text-xs sm:text-sm text-stone-300">
           Tonton playlist pembelajaran, video tutorial, serta konten inspiratif yang dapat diputar langsung di web atau melalui aplikasi YouTube.
         </p>

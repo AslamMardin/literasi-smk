@@ -162,9 +162,9 @@ function formatMarkdown(text) {
           <span class="rounded-full bg-amber-100 px-3 py-1 font-semibold text-amber-950">
             {{ selectedArticle.kategori }}
           </span>
-          <span class="text-stone-400 font-medium">
+          <!-- <span class="text-stone-400 font-medium">
             • {{ selectedArticle.bacaMenit }}
-          </span>
+          </span> -->
         </div>
 
         <!-- Judul Besar -->
@@ -319,9 +319,9 @@ function formatMarkdown(text) {
                 <span class="rounded-md bg-[#7F1D1D]/10 px-2 py-0.5 text-[11px] font-bold text-[#7F1D1D]">
                   Bab {{ a.no }}
                 </span>
-                <span class="text-[11px] text-stone-400 font-medium">
+                <!-- <span class="text-[11px] text-stone-400 font-medium">
                   {{ a.bacaMenit }}
-                </span>
+                </span> -->
               </div>
 
               <!-- Judul -->
@@ -330,11 +330,11 @@ function formatMarkdown(text) {
               </h3>
 
               <!-- Kategori Pill -->
-              <div class="mt-1.5">
+              <!-- <div class="mt-1.5">
                 <span class="text-[10px] font-semibold text-amber-800 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded-full">
                   {{ a.kategori }}
                 </span>
-              </div>
+              </div> -->
 
               <!-- Ringkasan Isi -->
               <p class="mt-2.5 line-clamp-3 text-xs leading-relaxed text-stone-600">

@@ -7,7 +7,7 @@ import { ebooks, getKategori, getPenulisCount, getTerbaru, getRekomendasi } from
 import { filter } from '../data/filter'
 import { useLiterasi } from '../composables/useLiterasi'
 
-const { studentName, hasStudentName, openEditNameModal, lastReadEbook } = useLiterasi()
+const { studentName, studentClass, hasStudentName, openEditNameModal, lastReadEbook } = useLiterasi()
 
 const daftarKategori = getKategori()
 const terbaru = getTerbaru(16)
@@ -46,7 +46,7 @@ function formatWaktu(iso) {
     <!-- Section Sapaan Siswa & Ebook Terakhir Dibaca (localStorage) -->
     <section class="mx-auto max-w-6xl px-4 sm:px-6 pt-6">
       <div class="space-y-4">
-        <!-- 1. Sapaan Nama Siswa -->
+        <!-- 1. Sapaan Nama & Kelas Siswa -->
         <div
           v-if="hasStudentName"
           class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl border border-amber-900/15 bg-white/90 p-4 sm:p-5 shadow-sm backdrop-blur"
@@ -56,16 +56,32 @@ function formatWaktu(iso) {
               {{ studentName.charAt(0).toUpperCase() }}
             </div>
             <div>
-              <h2 class="font-display font-bold text-base sm:text-lg text-stone-900">
-                Hai, {{ studentName }}
-              </h2>
-              <p class="text-xs text-stone-500">
+              <div class="flex items-center gap-2 flex-wrap">
+                <h2 class="font-display font-bold text-base sm:text-lg text-stone-900">
+                  Hai, {{ studentName }}
+                </h2>
+                <span
+                  v-if="studentClass"
+                  class="inline-flex items-center gap-1 rounded-lg bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-900 border border-amber-300/60"
+                >
+                  <i class="bi bi-mortarboard-fill text-[11px] text-amber-800"></i>
+                  {{ studentClass }}
+                </span>
+              </div>
+              <p class="text-xs text-stone-500 mt-0.5">
                 Selamat datang kembali di perpustakaan digital SMK NEGERI CAMPALAGIAN! 
               </p>
             </div>
           </div>
 
-        
+          <button
+            type="button"
+            @click="openEditNameModal"
+            class="self-end sm:self-center inline-flex items-center gap-1.5 rounded-xl border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-semibold text-stone-600 hover:bg-stone-100 hover:text-[#7F1D1D] transition shadow-xs"
+          >
+            <i class="bi bi-pencil-square text-xs"></i>
+            <span>Ubah Profil</span>
+          </button>
         </div>
 
         <!-- 2. Kartu E-book Terakhir Dibaca (localStorage) -->

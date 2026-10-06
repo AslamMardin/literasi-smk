@@ -137,9 +137,9 @@ function formatDate(ts) {
         class="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-stone-600 hover:bg-[#7F1D1D]/10 hover:text-[#7F1D1D] transition"
         :title="'Salin teks puisi'"
       >
-        <i class="bi" :class="copied ? 'bi-check-lg text-emerald-600' : 'bi-share-fill text-[11px]'"></i>
+        <i class="bi" :class="copied ? 'bi-check-lg text-emerald-600' : 'bi-copy text-[11px]'"></i>
         <span :class="copied ? 'font-bold text-emerald-600' : ''">
-          {{ copied ? 'Tersalin!' : 'Bagikan' }}
+          {{ copied ? 'Tersalin!' : '' }}
         </span>
       </button>
     </div>
