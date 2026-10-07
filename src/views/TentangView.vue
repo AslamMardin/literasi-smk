@@ -5,11 +5,11 @@ import PageHeader from '../components/PageHeader.vue'
 
 
 const pengurusKegiatan = [
-  { jabatan: 'Pembina', nama: 'Rasjuddin, S.Pd.I., MM.', foto: '/people/kepsek.PNG' },
+  { jabatan: 'Pembina / Penanggung Jawab', nama: 'Rasjuddin, S.Pd.I., MM.', foto: '/people/kepsek.PNG' },
   { jabatan: 'Ketua', nama: 'Abrianto Yasin, S.Pd.', foto: '/people/abi.jpeg' },
   { jabatan: 'Sekretaris', nama: 'Aslam Mardin, S.Kom., M.Kom.', foto: '/people/2023-2.jpg' },
   { jabatan: 'Bendahara', nama: 'Nisrawati, S.Pd.I', foto: '/images/avatar-bendahara.svg' },
-  { jabatan: 'Koordinator Materi', nama: 'Andi Reski Tappawali, S.Pd', foto: '/images/avatar-koordinator.svg' }
+  { jabatan: 'Koordinator materi, bahan pustaka dan kegiatan', nama: 'Andi Reski Tappawali, S.Pd', foto: '/images/avatar-koordinator.svg' }
 ]
 
 const siswaTerlibat = Array.from({ length: 12 }, (_, index) => ({

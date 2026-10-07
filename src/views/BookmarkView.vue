@@ -10,16 +10,15 @@ const { bookmarkedEbooks, bookmarks } = useLiterasi()
   <div class="min-h-screen bg-[#f8f1f1] pb-20">
     <PageHeader
       title="E-book Tersimpan"
-      :subtitle="`Koleksi buku favorit kamu yang telah di-bookmark (${bookmarkedEbooks.length} buku)`"
+      :subtitle="`Koleksi buku favorit kamu yang telah di-bookmark` "
     />
 
     <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-8">
       <div v-if="bookmarkedEbooks.length > 0">
         <div class="flex items-center justify-between mb-6 pb-3 border-b border-stone-200">
           <span class="text-xs font-bold uppercase tracking-wider text-stone-600">
-            Daftar Bookmark Kamu ({{ bookmarkedEbooks.length }})
+            Daftar Bookmark Kamu 
           </span>
-          <span class="text-xs text-stone-500">Tersimpan di browser perangkat ini</span>
         </div>
 
         <EbookGrid :ebooks="bookmarkedEbooks" />

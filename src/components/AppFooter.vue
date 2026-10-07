@@ -17,32 +17,7 @@
           </p>
         </div>
 
-        <!-- Navigasi -->
-        <div>
-      
-          <nav class="flex flex-wrap gap-x-5 gap-y-2 text-sm">
-            <a
-              href="#/"
-              class="text-[#f8eaea]/75 transition hover:text-amber-200"
-            >
-              Beranda
-            </a>
-
-            <a
-              href="#/koleksi"
-              class="text-[#f8eaea]/75 transition hover:text-amber-200"
-            >
-              Koleksi
-            </a>
-
-            <a
-              href="#/tentang"
-              class="text-[#f8eaea]/75 transition hover:text-amber-200"
-            >
-              Tentang
-            </a>
-          </nav>
-        </div>
+        
 
       </div>
 

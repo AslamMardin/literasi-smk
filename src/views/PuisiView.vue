@@ -175,7 +175,7 @@ function openComments(puisi) {
           <button
             type="button"
             @click="isModalOpen = true"
-            class="flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-amber-400 px-6 py-3 text-xs sm:text-sm font-bold text-amber-950 shadow-xl shadow-amber-950/20 transition-all hover:bg-amber-300 hover:scale-105 active:scale-95"
+            class="hidden sm:flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-amber-400 px-6 py-3 text-xs sm:text-sm font-bold text-amber-950 shadow-xl shadow-amber-950/20 transition-all hover:bg-amber-300 hover:scale-105 active:scale-95"
           >
             <i class="bi bi-pencil-square text-base"></i>
             <span>Tulis Puisi Sekarang</span>
@@ -223,21 +223,28 @@ function openComments(puisi) {
       </div>
 
       <!-- Info Hitungan & Status -->
-      <div class="mt-4 flex items-center justify-between text-xs text-stone-500">
-        <div class="flex items-center gap-2">
-          <span>
-            Menampilkan <strong class="text-[#7F1D1D]">{{ visiblePuisi.length }}</strong>
-            dari <strong class="text-[#7F1D1D]">{{ filteredPuisi.length }}</strong> karya puisi
-          </span>
-         
-        </div>
-        <button
-          @click="isModalOpen = true"
-          class="sm:hidden text-xs font-bold text-[#7F1D1D] hover:underline flex items-center gap-1"
-        >
-          <i class="bi bi-plus-circle-fill"></i> Tulis Puisi
-        </button>
-      </div>
+      <div class="mt-4 flex items-center justify-between text-xs text-stone-500 bg-red">
+  <div>
+    <span>
+      Menampilkan
+      <strong class="text-[#7F1D1D]">{{ visiblePuisi.length }}</strong>
+      dari
+      <strong class="text-[#7F1D1D]">{{ filteredPuisi.length }}</strong>
+      karya puisi
+    </span>
+  </div>
+
+  <a
+    type="button"
+    @click="isModalOpen = true"
+    class="text-[#7F1D1D] text-xs font-bold lg:hidden"
+  >
+    <i class="bi bi-pencil-square pr-1"></i>
+    <span>Tulis Puisi</span>
+  </a>
+</div>
+
+     
 
       <!-- Loading State -->
       <div v-if="isLoading" class="py-16 text-center text-stone-500">
@@ -293,7 +300,7 @@ function openComments(puisi) {
         <button
           type="button"
           @click="isModalOpen = true"
-          class="mt-4 flex items-center gap-2 rounded-xl bg-[#7F1D1D] px-5 py-2.5 text-xs font-bold text-amber-50 shadow transition hover:bg-[#661616]"
+          class="mt-4 hidden sm:flex items-center gap-2 rounded-xl bg-[#7F1D1D] px-5 py-2.5 text-xs font-bold text-amber-50 shadow transition hover:bg-[#661616]"
         >
           <i class="bi bi-pencil-fill"></i>
           <span>Tulis Puisi Sekarang</span>

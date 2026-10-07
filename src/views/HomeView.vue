@@ -60,13 +60,7 @@ function formatWaktu(iso) {
                 <h2 class="font-display font-bold text-base sm:text-lg text-stone-900">
                   Hai, {{ studentName }}
                 </h2>
-                <span
-                  v-if="studentClass"
-                  class="inline-flex items-center gap-1 rounded-lg bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-900 border border-amber-300/60"
-                >
-                  <i class="bi bi-mortarboard-fill text-[11px] text-amber-800"></i>
-                  {{ studentClass }}
-                </span>
+              
               </div>
               <p class="text-xs text-stone-500 mt-0.5">
                 Selamat datang kembali di perpustakaan digital SMK NEGERI CAMPALAGIAN! 
@@ -74,14 +68,7 @@ function formatWaktu(iso) {
             </div>
           </div>
 
-          <button
-            type="button"
-            @click="openEditNameModal"
-            class="self-end sm:self-center inline-flex items-center gap-1.5 rounded-xl border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-semibold text-stone-600 hover:bg-stone-100 hover:text-[#7F1D1D] transition shadow-xs"
-          >
-            <i class="bi bi-pencil-square text-xs"></i>
-            <span>Ubah Profil</span>
-          </button>
+         
         </div>
 
         <!-- 2. Kartu E-book Terakhir Dibaca (localStorage) -->
