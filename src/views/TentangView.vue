@@ -19,6 +19,17 @@ const siswaTerlibat = Array.from({ length: 12 }, (_, index) => ({
 
 const kategoriGaleri = ['Semua', 'Kegiatan Baca', 'Perpustakaan', 'Literasi Digital']
 const kategoriTerpilih = ref('Semua')
+const activePengurusIndex = ref(0)
+const dragOffset = ref(0)
+const swipeDirection = ref(0)
+let dragStartX = null
+let swipeFallbackTimer
+const visiblePengurusCards = 4
+const swipeThreshold = 80
+const isDragging = ref(false)
+const dragVelocity = ref(0)
+let lastDragX = 0
+let lastDragTime = 0
 
 // Daftar dokumentasi foto kegiatan literasi SMKN Campalagian
 const galeri = [
@@ -118,7 +129,124 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleKeydown)
   document.body.style.overflow = ''
+  window.clearTimeout(swipeFallbackTimer)
 })
+
+function pengurusDepth(index) {
+  return (index - activePengurusIndex.value + pengurusKegiatan.length) % pengurusKegiatan.length
+}
+
+function pengurusCardStyle(index) {
+  const depth = pengurusDepth(index)
+  const isActive = depth === 0
+  const drag = isActive ? dragOffset.value : 0
+
+  // Depth-based stacking offsets — wider spread so back cards are clearly visible
+  const spreadX = depth * 38
+  const spreadY = depth * -6
+  const depthZ = depth * -70
+  const depthScale = 1 - depth * 0.05
+
+  // Active card follows drag with tilt/rotation
+  const dragRotateZ = drag * 0.04
+  const dragRotateY = drag * -0.06
+  const stackRotateY = depth * -2
+
+  // Depth-based opacity & blur falloff — keep back cards clearly visible
+  const falloff = [1, 0.9, 0.75, 0.55]
+  const blurValues = [0, 0.3, 0.8, 1.5]
+
+  return {
+    transform: `translate3d(calc(-50% + ${spreadX + drag}px), calc(-50% + ${spreadY}px), ${depthZ}px) scale(${depthScale}) rotateY(${stackRotateY + dragRotateY}deg) rotate(${depth * -1.2 + dragRotateZ}deg)`,
+    opacity: depth < visiblePengurusCards ? (falloff[depth] ?? 0.2) : 0,
+    filter: `blur(${blurValues[depth] ?? 3}px)`,
+    zIndex: pengurusKegiatan.length * 2 - depth,
+    visibility: depth < visiblePengurusCards ? 'visible' : 'hidden',
+    pointerEvents: isActive ? 'auto' : 'none',
+    '--exit-x': swipeDirection.value > 0 ? '-120vw' : '120vw',
+    '--exit-rotation': swipeDirection.value > 0 ? '-14deg' : '14deg',
+    transitionDuration: isDragging.value && isActive ? '0ms' : undefined
+  }
+}
+
+function navigatePengurus(direction) {
+  if (swipeDirection.value || pengurusKegiatan.length < 2) return
+  isDragging.value = false
+  swipeDirection.value = direction
+  dragStartX = null
+  dragVelocity.value = 0
+  swipeFallbackTimer = window.setTimeout(finishPengurusSwipe, 550)
+}
+
+function finishPengurusSwipe() {
+  if (!swipeDirection.value) return
+  window.clearTimeout(swipeFallbackTimer)
+  activePengurusIndex.value =
+    (activePengurusIndex.value + swipeDirection.value + pengurusKegiatan.length) %
+    pengurusKegiatan.length
+  swipeDirection.value = 0
+  dragOffset.value = 0
+  dragVelocity.value = 0
+}
+
+function startPengurusDrag(event) {
+  if (swipeDirection.value) return
+  isDragging.value = true
+  dragStartX = event.clientX
+  lastDragX = event.clientX
+  lastDragTime = Date.now()
+  dragVelocity.value = 0
+  event.currentTarget.setPointerCapture(event.pointerId)
+}
+
+function movePengurusDrag(event) {
+  if (dragStartX === null || swipeDirection.value) return
+  const now = Date.now()
+  const dt = now - lastDragTime
+  if (dt > 0) {
+    dragVelocity.value = (event.clientX - lastDragX) / dt
+  }
+  lastDragX = event.clientX
+  lastDragTime = now
+  dragOffset.value = event.clientX - dragStartX
+}
+
+function endPengurusDrag() {
+  if (dragStartX === null) return
+  isDragging.value = false
+  const offset = dragOffset.value
+  const velocity = dragVelocity.value
+  dragStartX = null
+
+  // Swipe triggers on threshold OR high velocity flick
+  const velocityThreshold = 0.35
+  if (Math.abs(offset) >= swipeThreshold || Math.abs(velocity) > velocityThreshold) {
+    const direction = (Math.abs(offset) >= swipeThreshold)
+      ? (offset < 0 ? 1 : -1)
+      : (velocity < 0 ? 1 : -1)
+    navigatePengurus(direction)
+  } else {
+    dragOffset.value = 0
+    dragVelocity.value = 0
+  }
+}
+
+function cancelPengurusDrag() {
+  isDragging.value = false
+  dragStartX = null
+  dragOffset.value = 0
+  dragVelocity.value = 0
+}
+
+function handlePengurusKeydown(event) {
+  if (event.key === 'ArrowLeft') {
+    event.preventDefault()
+    navigatePengurus(-1)
+  } else if (event.key === 'ArrowRight') {
+    event.preventDefault()
+    navigatePengurus(1)
+  }
+}
 const keahlianPencipta = [
   { nama: 'Web Development', icon: 'bi-code-slash' },
   { nama: 'UI & Web Design', icon: 'bi-palette-fill' },
@@ -168,27 +296,91 @@ const fotoPenciptaGagal = ref(false)
           <div class="mt-2 h-1 w-12 rounded-full bg-[#d97706]"></div>
         </div>
 
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <article
-            v-for="pengurus in pengurusKegiatan"
-            :key="pengurus.jabatan"
-            class="rounded-2xl border border-amber-900/10 bg-white p-5 shadow-sm"
-          >
-            <div class="h-20 w-20 overflow-hidden rounded-2xl bg-amber-50 ring-1 ring-amber-900/10">
-              <img
-                :src="pengurus.foto"
-                :alt="`Ilustrasi avatar ${pengurus.jabatan}`"
-                class="h-full w-full object-cover"
-                loading="lazy"
+        <div
+          class="gsm-carousel"
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Carousel pengurus Gerakan Sulbar Madarras"
+          tabindex="0"
+          @keydown="handlePengurusKeydown"
+        >
+          <div class="gsm-carousel__stage">
+            <article
+              v-for="(pengurus, index) in pengurusKegiatan"
+              :key="pengurus.jabatan"
+              class="gsm-card"
+              :class="{ 'is-exiting': swipeDirection && index === activePengurusIndex }"
+              :style="pengurusCardStyle(index)"
+              :aria-hidden="pengurusDepth(index) !== 0"
+              :aria-roledescription="pengurusDepth(index) === 0 ? 'slide' : undefined"
+              :aria-label="pengurusDepth(index) === 0 ? `${index + 1} dari ${pengurusKegiatan.length}: ${pengurus.jabatan}, ${pengurus.nama}` : undefined"
+              @transitionend="index === activePengurusIndex && $event.propertyName === 'transform' && finishPengurusSwipe()"
+            >
+              <button
+                type="button"
+                class="gsm-card__button"
+                :aria-label="`${pengurus.jabatan}: ${pengurus.nama}`"
+                :tabindex="pengurusDepth(index) === 0 ? 0 : -1"
+                @pointerdown="startPengurusDrag"
+                @pointermove="movePengurusDrag"
+                @pointerup="endPengurusDrag"
+                @pointercancel="cancelPengurusDrag"
               >
+                <img
+                  :src="pengurus.foto"
+                  :alt="`Ilustrasi avatar ${pengurus.jabatan}`"
+                  class="gsm-card__image"
+                  loading="lazy"
+                >
+                <span class="gsm-card__number" aria-hidden="true">
+                  {{ String(index + 1).padStart(2, '0') }}
+                </span>
+                <span class="gsm-card__details">
+                  <span class="gsm-card__role">{{ pengurus.jabatan }}</span>
+                  <span class="gsm-card__name">{{ pengurus.nama }}</span>
+                  <span class="gsm-card__hint">
+                    <i class="bi bi-arrow-up-right-circle-fill" aria-hidden="true"></i>
+                    Pengurus GSM
+                  </span>
+                </span>
+              </button>
+            </article>
+          </div>
+
+          <div class="gsm-carousel__footer">
+            <button
+              type="button"
+              class="gsm-carousel__arrow"
+              aria-label="Pengurus sebelumnya"
+              :disabled="Boolean(swipeDirection) || pengurusKegiatan.length < 2"
+              @click="navigatePengurus(-1)"
+            >
+              <i class="bi bi-arrow-left" aria-hidden="true"></i>
+            </button>
+            <div class="gsm-carousel__indicators" aria-label="Pilih pengurus">
+              <button
+                v-for="(pengurus, index) in pengurusKegiatan"
+                :key="pengurus.jabatan"
+                type="button"
+                class="gsm-carousel__dot"
+                :class="{ 'is-current': activePengurusIndex === index }"
+                :aria-label="`Tampilkan pengurus ${index + 1}: ${pengurus.nama}`"
+                :aria-current="activePengurusIndex === index ? 'true' : undefined"
+                :disabled="Boolean(swipeDirection)"
+                @click="activePengurusIndex = index"
+              ></button>
             </div>
-            <p class="mt-4 text-xs font-bold uppercase tracking-wider text-stone-500">
-              {{ pengurus.jabatan }}
-            </p>
-            <h3 class="mt-1 font-display text-lg font-bold text-stone-900">
-              {{ pengurus.nama }}
-            </h3>
-          </article>
+            <button
+              type="button"
+              class="gsm-carousel__arrow"
+              aria-label="Pengurus berikutnya"
+              :disabled="Boolean(swipeDirection) || pengurusKegiatan.length < 2"
+              @click="navigatePengurus(1)"
+            >
+              <i class="bi bi-arrow-right" aria-hidden="true"></i>
+            </button>
+          </div>
+          <p class="gsm-carousel__hint">Geser kartu untuk melihat pengurus lainnya</p>
         </div>
 
         <!-- <div class="rounded-2xl border border-amber-900/10 bg-white p-5 sm:p-6 shadow-sm">
@@ -409,3 +601,286 @@ const fotoPenciptaGagal = ref(false)
     </div>
   </div>
 </template>
+
+<style scoped>
+.gsm-carousel {
+  width: 100%;
+  outline: none;
+}
+
+.gsm-carousel:focus-visible {
+  border-radius: 1.5rem;
+  outline: 3px solid rgb(217 119 6 / 60%);
+  outline-offset: 4px;
+}
+
+.gsm-carousel__stage {
+  position: relative;
+  height: 32rem;
+  overflow: hidden;
+  perspective: 1000px;
+  perspective-origin: 50% 44%;
+  transform-style: preserve-3d;
+}
+
+/* Subtle depth-shadow glow behind the stack */
+.gsm-carousel__stage::after {
+  content: "";
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgb(120 53 15 / 18%) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.gsm-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(320px, 78vw);
+  height: 27rem;
+  transform-style: preserve-3d;
+  /* Spring-like cubic-bezier — fast & snappy */
+  transition:
+    transform 380ms cubic-bezier(0.175, 0.885, 0.32, 1.08),
+    opacity 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    filter 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 250ms ease;
+  will-change: transform, opacity, filter;
+}
+
+.gsm-card.is-exiting {
+  transform: translate3d(calc(-50% + var(--exit-x)), calc(-50% + 20px), 60px) rotate(var(--exit-rotation)) scale(0.78) !important;
+  opacity: 0 !important;
+  filter: blur(2px) !important;
+  transition:
+    transform 360ms cubic-bezier(0.55, 0.055, 0.675, 0.19),
+    opacity 280ms ease-out,
+    filter 280ms ease-out !important;
+}
+
+.gsm-card__button {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid rgb(120 53 15 / 12%);
+  border-radius: 1.5rem;
+  background: #3d1010;
+  text-align: left;
+  box-shadow:
+    0 22px 50px rgb(41 24 15 / 22%),
+    0 8px 20px rgb(41 24 15 / 12%),
+    inset 0 1px 0 rgb(255 255 255 / 6%);
+  isolation: isolate;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+  transition: box-shadow 300ms ease;
+}
+
+.gsm-card__button:active {
+  cursor: grabbing;
+  box-shadow:
+    0 30px 65px rgb(41 24 15 / 30%),
+    0 12px 25px rgb(41 24 15 / 18%),
+    inset 0 1px 0 rgb(255 255 255 / 8%);
+}
+
+.gsm-card__button::after {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(0 0 0 / 5%) 15%, rgb(0 0 0 / 15%) 42%, rgb(35 12 8 / 94%) 100%);
+  content: "";
+}
+
+.gsm-card__button:focus-visible {
+  outline: 3px solid rgb(217 119 6 / 70%);
+  outline-offset: 2px;
+}
+
+.gsm-card__image {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  opacity: 0.88;
+  transition: transform 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Subtle parallax on active card image */
+.gsm-card__button:active .gsm-card__image {
+  transform: scale(1.03);
+}
+
+.gsm-card__number {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1;
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 35%);
+  border-radius: 0.85rem;
+  background: rgb(62 16 16 / 42%);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 800;
+  backdrop-filter: blur(8px);
+  transition: transform 300ms ease, opacity 300ms ease;
+}
+
+.gsm-card.is-exiting .gsm-card__number {
+  transform: scale(0.85);
+  opacity: 0;
+}
+
+.gsm-card__details {
+  position: absolute;
+  right: 1.1rem;
+  bottom: 1.25rem;
+  left: 1.1rem;
+  z-index: 1;
+  display: grid;
+  gap: 0.45rem;
+  color: white;
+  transition: transform 350ms ease, opacity 350ms ease;
+}
+
+.gsm-card.is-exiting .gsm-card__details {
+  transform: translateY(8px);
+  opacity: 0;
+}
+
+.gsm-card__role {
+  color: #fcd34d;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.gsm-card__name {
+  font-family: inherit;
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.gsm-card__hint {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+  color: rgb(255 255 255 / 75%);
+  font-size: 0.75rem;
+}
+
+.gsm-carousel__footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-top: 0.75rem;
+}
+
+.gsm-carousel__arrow {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border: 1px solid rgb(120 53 15 / 16%);
+  border-radius: 9999px;
+  background: white;
+  color: #7f1d1d;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 12px rgb(41 24 15 / 8%);
+  transition: background 180ms ease, color 180ms ease, transform 220ms cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 180ms ease;
+}
+
+.gsm-carousel__arrow:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.06);
+  background: #7f1d1d;
+  color: white;
+  box-shadow: 0 8px 20px rgb(127 29 29 / 25%);
+}
+
+.gsm-carousel__arrow:active:not(:disabled) {
+  transform: translateY(0) scale(0.95);
+}
+
+.gsm-carousel__arrow:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.gsm-carousel__indicators {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.gsm-carousel__dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: #d6c8b8;
+  transition: width 280ms cubic-bezier(0.175, 0.885, 0.32, 1.275), background 220ms ease, transform 200ms ease;
+}
+
+.gsm-carousel__dot:hover:not(.is-current) {
+  background: #c4a88a;
+  transform: scale(1.25);
+}
+
+.gsm-carousel__dot.is-current {
+  width: 1.5rem;
+  background: #d97706;
+}
+
+.gsm-carousel__hint {
+  margin-top: 0.65rem;
+  color: #78716c;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .gsm-carousel__stage {
+    height: 29rem;
+  }
+
+  .gsm-card {
+    width: min(320px, 82vw);
+    height: 25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gsm-card,
+  .gsm-carousel__arrow,
+  .gsm-carousel__dot {
+    transition-duration: 0.01ms;
+  }
+
+  .gsm-card.is-exiting {
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>

@@ -215,15 +215,15 @@ onBeforeUnmount(() => {
 
     <!-- Indikator Posisi & Navigasi Titik -->
     <div class="mt-1 flex flex-col sm:flex-row items-center justify-center gap-3 text-xs text-stone-500">
-      <div class="flex items-center gap-1.5">
+      <!-- <div class="flex items-center gap-1.5">
         <span class="font-medium">Fokus Ebook:</span>
         <span class="rounded-full bg-[#7F1D1D]/10 px-2.5 py-0.5 font-bold text-[#7F1D1D]">
           {{ currentIndex + 1 }} / {{ ebooks.length }}
         </span>
-      </div>
+      </div> -->
 
       <!-- Quick Jump Dots (Maks 10 titik agar tetap rapi) -->
-      <div class="flex items-center gap-1.5">
+      <!-- <div class="flex items-center gap-1.5">
         <button
           v-for="(e, i) in ebooks.slice(0, Math.min(ebooks.length, 10))"
           :key="e.id"
@@ -233,7 +233,7 @@ onBeforeUnmount(() => {
           class="h-1.5 rounded-full transition-all duration-300"
           :class="currentIndex === i ? 'w-6 bg-[#7F1D1D]' : 'w-1.5 bg-stone-300 hover:bg-stone-400'"
         ></button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
