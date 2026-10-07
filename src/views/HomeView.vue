@@ -3,11 +3,14 @@ import HeroSection from '../components/HeroSection.vue'
 import StatsBar from '../components/StatsBar.vue'
 import EbookSection from '../components/EbookSection.vue'
 import BookCover from '../components/BookCover.vue'
+import PopularBooksSection from '../components/PopularBooksSection.vue'
 import { ebooks, getKategori, getPenulisCount, getTerbaru, getRekomendasi } from '../data/ebooks'
 import { filter } from '../data/filter'
 import { useLiterasi } from '../composables/useLiterasi'
+import { usePopularBooks } from '../composables/usePopularBooks'
 
 const { studentName, studentClass, hasStudentName, openEditNameModal, lastReadEbook } = useLiterasi()
+const { mostOpenedBooks } = usePopularBooks()
 
 const daftarKategori = getKategori()
 const terbaru = getTerbaru(16)
@@ -118,6 +121,8 @@ function formatWaktu(iso) {
 
 
     <EbookSection title="Ebook Terbaru" link="#/koleksi" :ebooks="terbaru" horizontal />
+
+    <PopularBooksSection :books="mostOpenedBooks" />
 
     <div class="bg-[#7F1D1D]/[0.04]">
       <EbookSection title="Rekomendasi" link="#/koleksi" :ebooks="rekomendasi" />

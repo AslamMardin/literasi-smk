@@ -6,12 +6,14 @@ import workerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
 import { getEbookById } from '../data/ebooks'
 import { downloadUrls, previewUrl, viewUrl } from '../data/drive'
 import { useLiterasi } from '../composables/useLiterasi'
+import { usePopularBooks } from '../composables/usePopularBooks'
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc
 
 const props = defineProps({ id: String })
 const ebook = computed(() => getEbookById(props.id))
 const { isBookmarked, toggleBookmark, recordLastRead } = useLiterasi()
+const { recordBookOpened } = usePopularBooks()
 
 const status = ref('loading') // loading | ready | fallback
 const page = ref(1)
@@ -103,6 +105,9 @@ onMounted(() => {
   window.addEventListener('resize', onResize)
   if (ebook.value) {
     recordLastRead(ebook.value)
+    recordBookOpened(ebook.value.id).catch((error) => {
+      console.error('Gagal mencatat pembukaan ebook:', error)
+    })
   }
   loadPdf()
 })
