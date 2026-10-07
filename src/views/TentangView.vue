@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import PageHeader from '../components/PageHeader.vue'
 
 
@@ -22,8 +22,10 @@ const kategoriTerpilih = ref('Semua')
 const activePengurusIndex = ref(0)
 const dragOffset = ref(0)
 const swipeDirection = ref(0)
+const returningPengurusIndex = ref(null)
 let dragStartX = null
 let swipeFallbackTimer
+let swipeAnimationFrame = 0
 const visiblePengurusCards = 4
 const swipeThreshold = 80
 const isDragging = ref(false)
@@ -130,6 +132,7 @@ onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleKeydown)
   document.body.style.overflow = ''
   window.clearTimeout(swipeFallbackTimer)
+  window.cancelAnimationFrame(swipeAnimationFrame)
 })
 
 function pengurusDepth(index) {
@@ -155,17 +158,20 @@ function pengurusCardStyle(index) {
   // Depth-based opacity & blur falloff — keep back cards clearly visible
   const falloff = [1, 0.9, 0.75, 0.55]
   const blurValues = [0, 0.3, 0.8, 1.5]
+  const isReturning = index === returningPengurusIndex.value
 
   return {
-    transform: `translate3d(calc(-50% + ${spreadX + drag}px), calc(-50% + ${spreadY}px), ${depthZ}px) scale(${depthScale}) rotateY(${stackRotateY + dragRotateY}deg) rotate(${depth * -1.2 + dragRotateZ}deg)`,
-    opacity: depth < visiblePengurusCards ? (falloff[depth] ?? 0.2) : 0,
+    transform: isReturning
+      ? 'translate3d(calc(-50% - 120vw), calc(-50% + 20px), 60px) scale(0.78)'
+      : `translate3d(calc(-50% + ${spreadX + drag}px), calc(-50% + ${spreadY}px), ${depthZ}px) scale(${depthScale}) rotateY(${stackRotateY + dragRotateY}deg) rotate(${depth * -1.2 + dragRotateZ}deg)`,
+    opacity: isReturning ? 0 : depth < visiblePengurusCards ? (falloff[depth] ?? 0.2) : 0,
     filter: `blur(${blurValues[depth] ?? 3}px)`,
     zIndex: pengurusKegiatan.length * 2 - depth,
     visibility: depth < visiblePengurusCards ? 'visible' : 'hidden',
     pointerEvents: isActive ? 'auto' : 'none',
     '--exit-x': swipeDirection.value > 0 ? '-120vw' : '120vw',
     '--exit-rotation': swipeDirection.value > 0 ? '-14deg' : '14deg',
-    transitionDuration: isDragging.value && isActive ? '0ms' : undefined
+    transitionDuration: isReturning || (isDragging.value && isActive) ? '0ms' : undefined
   }
 }
 
@@ -175,16 +181,34 @@ function navigatePengurus(direction) {
   swipeDirection.value = direction
   dragStartX = null
   dragVelocity.value = 0
+
+  if (direction < 0) {
+    const previousIndex =
+      (activePengurusIndex.value - 1 + pengurusKegiatan.length) % pengurusKegiatan.length
+    returningPengurusIndex.value = previousIndex
+    nextTick(() => {
+      swipeAnimationFrame = window.requestAnimationFrame(() => {
+        swipeAnimationFrame = window.requestAnimationFrame(() => {
+          activePengurusIndex.value = previousIndex
+          returningPengurusIndex.value = null
+          swipeAnimationFrame = 0
+        })
+      })
+    })
+  }
+
   swipeFallbackTimer = window.setTimeout(finishPengurusSwipe, 550)
 }
 
 function finishPengurusSwipe() {
   if (!swipeDirection.value) return
   window.clearTimeout(swipeFallbackTimer)
-  activePengurusIndex.value =
-    (activePengurusIndex.value + swipeDirection.value + pengurusKegiatan.length) %
-    pengurusKegiatan.length
+  if (swipeDirection.value > 0) {
+    activePengurusIndex.value =
+      (activePengurusIndex.value + 1) % pengurusKegiatan.length
+  }
   swipeDirection.value = 0
+  returningPengurusIndex.value = null
   dragOffset.value = 0
   dragVelocity.value = 0
 }
@@ -309,7 +333,7 @@ const fotoPenciptaGagal = ref(false)
               v-for="(pengurus, index) in pengurusKegiatan"
               :key="pengurus.jabatan"
               class="gsm-card"
-              :class="{ 'is-exiting': swipeDirection && index === activePengurusIndex }"
+              :class="{ 'is-exiting': swipeDirection > 0 && index === activePengurusIndex }"
               :style="pengurusCardStyle(index)"
               :aria-hidden="pengurusDepth(index) !== 0"
               :aria-roledescription="pengurusDepth(index) === 0 ? 'slide' : undefined"
@@ -332,9 +356,7 @@ const fotoPenciptaGagal = ref(false)
                   class="gsm-card__image"
                   loading="lazy"
                 >
-                <span class="gsm-card__number" aria-hidden="true">
-                  {{ String(index + 1).padStart(2, '0') }}
-                </span>
+             
                 <span class="gsm-card__details">
                   <span class="gsm-card__role">{{ pengurus.jabatan }}</span>
                   <span class="gsm-card__name">{{ pengurus.nama }}</span>
