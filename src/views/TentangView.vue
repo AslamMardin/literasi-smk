@@ -370,15 +370,7 @@ const fotoPenciptaGagal = ref(false)
           </div>
 
           <div class="gsm-carousel__footer">
-            <button
-              type="button"
-              class="gsm-carousel__arrow"
-              aria-label="Pengurus sebelumnya"
-              :disabled="Boolean(swipeDirection) || pengurusKegiatan.length < 2"
-              @click="navigatePengurus(-1)"
-            >
-              <i class="bi bi-arrow-left" aria-hidden="true"></i>
-            </button>
+          
             <div class="gsm-carousel__indicators" aria-label="Pilih pengurus">
               <button
                 v-for="(pengurus, index) in pengurusKegiatan"
@@ -392,17 +384,8 @@ const fotoPenciptaGagal = ref(false)
                 @click="activePengurusIndex = index"
               ></button>
             </div>
-            <button
-              type="button"
-              class="gsm-carousel__arrow"
-              aria-label="Pengurus berikutnya"
-              :disabled="Boolean(swipeDirection) || pengurusKegiatan.length < 2"
-              @click="navigatePengurus(1)"
-            >
-              <i class="bi bi-arrow-right" aria-hidden="true"></i>
-            </button>
+          
           </div>
-          <p class="gsm-carousel__hint">Geser kartu untuk melihat pengurus lainnya</p>
         </div>
 
         <!-- <div class="rounded-2xl border border-amber-900/10 bg-white p-5 sm:p-6 shadow-sm">
