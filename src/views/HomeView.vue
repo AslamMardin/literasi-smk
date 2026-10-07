@@ -122,11 +122,13 @@ function formatWaktu(iso) {
 
     <EbookSection title="Ebook Terbaru" link="#/koleksi" :ebooks="terbaru" horizontal />
 
-    <PopularBooksSection :books="mostOpenedBooks" />
+    
 
     <div class="bg-[#7F1D1D]/[0.04]">
       <EbookSection title="Rekomendasi" link="#/koleksi" :ebooks="rekomendasi" />
     </div>
+
+    <PopularBooksSection :books="mostOpenedBooks" />
 
     <!-- Kategori -->
     <section class="mx-auto max-w-6xl px-5 py-12 sm:px-6">
