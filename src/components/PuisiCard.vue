@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 const props = defineProps({
   puisi: {
@@ -14,6 +14,33 @@ const props = defineProps({
 const emit = defineEmits(['toggle-like', 'delete-puisi', 'edit-puisi', 'open-comments'])
 
 const copied = ref(false)
+const poemContentRef = ref(null)
+const isExpanded = ref(false)
+const isOverflowing = ref(false)
+let resizeObserver
+
+async function measurePoemOverflow() {
+  await nextTick()
+  const element = poemContentRef.value
+  if (!element || isExpanded.value) return
+
+  isOverflowing.value = element.scrollHeight > element.clientHeight
+}
+
+watch(() => props.puisi.isi, () => {
+  isExpanded.value = false
+  measurePoemOverflow()
+})
+
+onMounted(() => {
+  measurePoemOverflow()
+  resizeObserver = new ResizeObserver(measurePoemOverflow)
+  if (poemContentRef.value) resizeObserver.observe(poemContentRef.value)
+})
+
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
+})
 
 async function copyPuisi() {
   const authorInfo = props.puisi.kelas ? `${props.puisi.penulis} (${props.puisi.kelas})` : props.puisi.penulis
@@ -81,11 +108,24 @@ function formatDate(ts) {
     <div class="relative mt-3 flex min-h-[2rem] flex-1 flex-col border-y border-[#eee6d9] py-4">
       <span class="absolute -top-3 left-0 bg-[#fffdf8] pr-2 font-serif text-3xl leading-none text-[#b6a587]/60" aria-hidden="true">“</span>
       <p
+        ref="poemContentRef"
         class="mt-1 whitespace-pre-line font-serif text-sm italic leading-7 text-stone-600"
-        :class="puisi.kategori === 'Kalindaqdaq Mandar' ? 'text-center' : 'text-left'"
+        :class="[
+          isExpanded ? 'max-h-none' : 'max-h-56 overflow-hidden',
+          puisi.kategori === 'Kalindaqdaq Mandar' ? 'text-center' : 'text-left'
+        ]"
       >
         {{ puisi.isi }}
       </p>
+      <button
+        v-if="isOverflowing"
+        type="button"
+        class="mt-2 self-start text-xs font-semibold text-[#7F1D1D] transition hover:text-[#5f1616]"
+        :aria-expanded="isExpanded"
+        @click="isExpanded = !isExpanded"
+      >
+        {{ isExpanded ? 'Tampilkan lebih sedikit' : 'Baca selengkapnya...' }}
+      </button>
       <span class="mt-auto self-end pt-2 font-serif text-3xl leading-none text-[#b6a587]/60" aria-hidden="true">”</span>
     </div>
 
