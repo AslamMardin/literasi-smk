@@ -17,7 +17,7 @@ defineProps({
 }
 </style>
 
-<template>
+ <template>
   <section v-if="books.length" class="mx-auto max-w-6xl px-5  sm:px-6">
     <div class="mb-7 flex items-end justify-between gap-4">
       <h2 class="font-display text-2xl font-bold text-[#4a1d1d] sm:text-3xl">
