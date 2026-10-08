@@ -7,12 +7,13 @@ import { getEbookById } from '../data/ebooks'
 import { downloadUrls, previewUrl, viewUrl } from '../data/drive'
 import { useLiterasi } from '../composables/useLiterasi'
 import { usePopularBooks } from '../composables/usePopularBooks'
+import { startReadingTimer } from '../composables/useReadingTimer'
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc
 
 const props = defineProps({ id: String })
 const ebook = computed(() => getEbookById(props.id))
-const { isBookmarked, toggleBookmark, recordLastRead } = useLiterasi()
+const { isBookmarked, toggleBookmark, recordLastRead, studentNis, studentName, studentClass } = useLiterasi()
 const { recordBookOpened } = usePopularBooks()
 
 const status = ref('loading') // loading | ready | fallback
@@ -28,6 +29,19 @@ let renderTask = null
 let renderToken = 0
 let destroyed = false
 let resizeTimer = null
+let stopReadingTimer = null
+
+watch(
+  [studentNis, studentName, studentClass],
+  ([nis, name, kelas]) => {
+    stopReadingTimer?.()
+    stopReadingTimer = null
+    if (nis.trim() && name.trim() && kelas.trim()) {
+      stopReadingTimer = startReadingTimer({ nis, name, kelas })
+    }
+  },
+  { immediate: true }
+)
 
 async function loadPdf() {
   if (!ebook.value) return
@@ -113,6 +127,7 @@ onMounted(() => {
 })
 onBeforeUnmount(() => {
   destroyed = true
+  stopReadingTimer?.()
   window.removeEventListener('keydown', onKey)
   window.removeEventListener('resize', onResize)
   renderTask?.cancel()

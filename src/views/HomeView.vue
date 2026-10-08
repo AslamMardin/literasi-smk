@@ -4,6 +4,7 @@ import StatsBar from '../components/StatsBar.vue'
 import EbookSection from '../components/EbookSection.vue'
 import BookCover from '../components/BookCover.vue'
 import PopularBooksSection from '../components/PopularBooksSection.vue'
+import ReadingLeaderboardSection from '../components/ReadingLeaderboardSection.vue'
 import { ebooks, getKategori, getPenulisCount, getTerbaru, getRekomendasi } from '../data/ebooks'
 import { filter } from '../data/filter'
 import { useLiterasi } from '../composables/useLiterasi'
@@ -129,6 +130,7 @@ function formatWaktu(iso) {
     </div>
 
     <PopularBooksSection :books="mostOpenedBooks" />
+    <ReadingLeaderboardSection />
 
     <!-- Kategori -->
     <section class="mx-auto max-w-6xl px-5 py-12 sm:px-6">
