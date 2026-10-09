@@ -29,12 +29,12 @@ function getStudentKey(nis) {
   return encodeURIComponent(nis).replace(/\./g, '%2E')
 }
 
-function sortStudents(entries, secondsField) {
+function sortStudents(entries, secondsField, limit = 5) {
   return Object.entries(entries)
     .map(([nis, stats]) => ({ ...stats, nis, seconds: Number(stats?.[secondsField]) }))
     .filter(({ name, seconds }) => typeof name === 'string' && name.trim() && Number.isSafeInteger(seconds) && seconds > 0)
     .sort((a, b) => b.seconds - a.seconds || a.name.localeCompare(b.name, 'id'))
-    .slice(0, 5)
+    .slice(0, limit)
 }
 
 export async function recordReadingSeconds({ nis, name, kelas }, seconds) {
@@ -98,12 +98,12 @@ export function useReadingStats() {
     )
   }
 
-  const topGlobal = computed(() => sortStudents(readingStats.value, 'totalSeconds'))
+  const topGlobal = computed(() => sortStudents(readingStats.value, 'totalSeconds', 5))
   const rajinMingguIni = computed(() => {
     const thisWeek = Object.fromEntries(
       Object.entries(readingStats.value).filter(([, stats]) => stats?.weekKey === currentWeekKey.value)
     )
-    return sortStudents(thisWeek, 'weekSeconds')
+    return sortStudents(thisWeek, 'weekSeconds', 15)
   })
 
   return {
