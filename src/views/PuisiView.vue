@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, nextTick, onBeforeUnmount } from 'vue'
+import { ref, computed } from 'vue'
 import { usePuisi } from '../composables/usePuisi'
 import { useLiterasi } from '../composables/useLiterasi'
 import PuisiCard from '../components/PuisiCard.vue'
@@ -11,12 +11,8 @@ import PuisiCommentsModal from '../components/PuisiCommentsModal.vue'
 const { puisiList, isLoading, toggleLike, hasLiked, hapusPuisi } = usePuisi()
 const { studentName, studentNis, studentClass } = useLiterasi()
 
-const PAGE_SIZE = 5
-const supportsIntersectionObserver = typeof IntersectionObserver !== 'undefined'
 const searchQuery = ref('')
 const selectedCategory = ref('Semua')
-const visibleLimit = ref(PAGE_SIZE)
-const loadMoreSentinel = ref(null)
 const selectedPuisiForCommentsId = ref(null)
 const isModalOpen = ref(false)
 const isEditModalOpen = ref(false)
@@ -114,37 +110,9 @@ const filteredPuisi = computed(() => {
   return list
 })
 
-const visiblePuisi = computed(() => filteredPuisi.value.slice(0, visibleLimit.value))
-const hasMorePuisi = computed(() => visibleLimit.value < filteredPuisi.value.length)
 const selectedPuisiForComments = computed(() =>
   puisiList.value.find((puisi) => puisi.id === selectedPuisiForCommentsId.value) || null
 )
-
-let loadMoreObserver = null
-
-function loadMorePuisi() {
-  visibleLimit.value = Math.min(visibleLimit.value + PAGE_SIZE, filteredPuisi.value.length)
-}
-
-function observeLoadMoreSentinel(element) {
-  loadMoreObserver?.disconnect()
-  loadMoreObserver = null
-  if (!element || !supportsIntersectionObserver) return
-
-  loadMoreObserver = new IntersectionObserver((entries) => {
-    if (entries[0]?.isIntersecting) loadMorePuisi()
-  }, { rootMargin: '180px' })
-  loadMoreObserver.observe(element)
-}
-
-watch(loadMoreSentinel, observeLoadMoreSentinel, { flush: 'post' })
-watch([searchQuery, selectedCategory], async () => {
-  visibleLimit.value = PAGE_SIZE
-  await nextTick()
-  observeLoadMoreSentinel(loadMoreSentinel.value)
-})
-
-onBeforeUnmount(() => loadMoreObserver?.disconnect())
 
 function openComments(puisi) {
   selectedPuisiForCommentsId.value = puisi.id
@@ -226,9 +194,7 @@ function openComments(puisi) {
       <div class="mt-4 flex items-center justify-between text-xs text-stone-500 bg-red">
   <div>
     <span>
-      Menampilkan
-      <strong class="text-[#7F1D1D]">{{ visiblePuisi.length }}</strong>
-      dari
+      Total
       <strong class="text-[#7F1D1D]">{{ filteredPuisi.length }}</strong>
       karya puisi
     </span>
@@ -256,7 +222,7 @@ function openComments(puisi) {
       <template v-else-if="filteredPuisi.length > 0">
         <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <PuisiCard
-            v-for="p in visiblePuisi"
+            v-for="p in filteredPuisi"
             :key="p.id"
             :puisi="p"
             :is-liked="hasLiked(p.id)"
@@ -267,22 +233,6 @@ function openComments(puisi) {
             @delete-puisi="openDeleteModal"
             @open-comments="openComments"
           />
-        </div>
-        <div
-          v-if="hasMorePuisi"
-          ref="loadMoreSentinel"
-          class="mt-8 flex justify-center py-4 text-xs text-stone-400"
-          aria-live="polite"
-        >
-          <button
-            v-if="!supportsIntersectionObserver"
-            type="button"
-            class="rounded-xl bg-white px-4 py-2 font-semibold text-[#7F1D1D] shadow-sm"
-            @click="loadMorePuisi"
-          >
-            Muat 5 puisi lagi
-          </button>
-          <span v-else>Gulir untuk melihat karya lainnya</span>
         </div>
       </template>
 

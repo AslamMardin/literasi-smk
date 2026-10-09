@@ -13,40 +13,6 @@ import {
 const KEY_LIKED_PUISI = 'literasi_liked_puisi_ids'
 const PUISI_RETENTION_MS = 30 * 24 * 60 * 60 * 1000
 
-// Contoh puisi & Kalindaqdaq awal (agar langsung berisi karya sastra indah)
-const initialSamples = [
-  {
-    id: 'sample-1',
-    judul: 'Kalindaqdaq Pesan Leluhur',
-    penulis: 'Kearifan Sastra Mandar',
-    kelas: 'Warisan Leluhur',
-    kategori: 'Kalindaqdaq Mandar',
-    isi: 'Mamballang paiq litaq\nPariama di pambare-bareang\nSiruntung tanda pau\nPallaki pole di Balanipa',
-    likes: 18,
-    createdAt: Date.now() - 1000 * 60 * 60 * 24 * 3
-  },
-  {
-    id: 'sample-2',
-    judul: 'Layar Sandeq Menerjang Badai',
-    penulis: 'Ahmad Fauzi',
-    kelas: 'X TKJ 1',
-    kategori: 'Alam & Budaya Mandar',
-    isi: 'Di bawah terik langit Selat Makassar\nLayar segitiga mengembang gagah\nMenembus gelombang tanpa gentar\nMembawa mimpi anak Mandar yang megah.',
-    likes: 24,
-    createdAt: Date.now() - 1000 * 60 * 60 * 12
-  },
-  {
-    id: 'sample-3',
-    judul: 'Lentera di Ruang Kelas',
-    penulis: 'Rani Nurfadillah',
-    kelas: 'XI RPL',
-    kategori: 'Sekolah & Cita-Cita',
-    isi: 'Buku terbuka di meja kayu\nJari-jemari menari di atas tuts tuts ilmu\nDi SMKN Campalagian kami bertumpu\nMerajut masa depan di tanah kelahiranku.',
-    likes: 15,
-    createdAt: Date.now() - 1000 * 60 * 60 * 2
-  }
-]
-
 const puisiList = ref([])
 const isLoading = ref(true)
 const likedIds = ref([])
@@ -124,20 +90,15 @@ export function usePuisi() {
           // Urutkan dari yang terbaru
           puisiList.value = list.sort((a, b) => b.createdAt - a.createdAt)
         } else {
-          // Jika di database masih kosong, gunakan data sample
-          puisiList.value = [...initialSamples]
+          puisiList.value = []
         }
         isLoading.value = false
       }, (error) => {
         console.warn('Firebase reading puisi error:', error)
-        if (puisiList.value.length === 0) {
-          puisiList.value = [...initialSamples]
-        }
         isLoading.value = false
       })
     } catch (err) {
       console.warn('Firebase init puisi error:', err)
-      puisiList.value = [...initialSamples]
       isLoading.value = false
     }
   }
