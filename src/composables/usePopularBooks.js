@@ -34,7 +34,7 @@ export function usePopularBooks() {
       }))
       .filter(({ ebook, openCount }) => ebook && Number.isFinite(openCount) && openCount > 0)
       .sort((a, b) => b.openCount - a.openCount)
-      .slice(0, 5)
+      .slice(0, 10)
       .map(({ ebook, openCount }) => ({ ...ebook, openCount }))
   )
 

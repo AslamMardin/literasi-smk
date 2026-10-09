@@ -510,8 +510,21 @@ const fotoPenciptaGagal = ref(false)
                   Aslam Mardin, S.Kom., M.Kom., Gr.
                 </h3>
 
+                <div class="mt-3">
+                  <a
+                    href="tel:085825587404"
+                    class="inline-flex items-center gap-2 rounded-full border border-amber-200/30 bg-white/10 px-3 py-1.5 text-xs sm:text-sm font-semibold text-amber-50 shadow-sm transition hover:bg-white/15"
+                    aria-label="Hubungi nomor telepon Aslam Mardin"
+                  >
+                    <i class="bi bi-whatsapp"></i>
+                    <span>0858-2558-7404</span>
+                  </a>
+                </div>
+
                 <p class="mt-2.5 text-xs sm:text-sm text-amber-100/90 leading-relaxed max-w-3xl">
-                  Berasal dari Desa Bonde, Kecamatan Campalagian, Polewali Mandar. Menempuh pendidikan studi S1 di Universitas Al Asyariah Mandar tahun 2023 dan program magister di Universitas Handayani Makassar tahun 2025, serta aktif mengembangkan diri di bidang pendidikan dan teknologi informasi.
+                 Berasal dari Desa Bonde, Kecamatan Campalagian, Kabupaten Polewali Mandar. Menyelesaikan pendidikan sarjana (S1) di Universitas Al Asyariah Mandar pada tahun 2023 dan pendidikan magister (S2) di Universitas Handayani Makassar pada tahun 2025. Aktif mengembangkan kompetensi di bidang pendidikan dan teknologi informasi.
+
+Saat ini berprofesi sebagai guru di SMK Negeri Campalagian dengan bidang pengajaran Desain Komunikasi Visual (DKV). Selain itu, aktif sebagai dosen di Institut Teknologi dan Bisnis Muhammadiyah Polewali Mandar serta Sekolah Tinggi Agama Islam Negeri (STAIN) Majene.
                 </p>
               </div>
             </div>
