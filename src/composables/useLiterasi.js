@@ -6,6 +6,7 @@ const KEY_NIS = 'literasi_nis_siswa'
 const KEY_KELAS = 'literasi_kelas_siswa'
 const KEY_BOOKMARKS = 'literasi_bookmarks'
 const KEY_LAST_READ = 'literasi_terakhir_dibaca'
+const KEY_READING_POSITIONS = 'literasi_posisi_baca'
 
 // State reaktif global (singleton di memory)
 const studentName = ref(localStorage.getItem(KEY_NAMA) || '')
@@ -18,6 +19,7 @@ const showNameModal = ref(
 )
 const bookmarks = ref([])
 const lastRead = ref(null)
+const readingPositions = ref([])
 
 // Inisialisasi bookmarks dari localStorage
 try {
@@ -33,6 +35,15 @@ try {
   lastRead.value = savedLastRead ? JSON.parse(savedLastRead) : null
 } catch (e) {
   lastRead.value = null
+}
+
+try {
+  const savedReadingPositions = localStorage.getItem(KEY_READING_POSITIONS)
+  const parsedReadingPositions = savedReadingPositions ? JSON.parse(savedReadingPositions) : []
+  readingPositions.value = Array.isArray(parsedReadingPositions) ? parsedReadingPositions : []
+} catch (e) {
+  readingPositions.value = []
+  console.warn('Gagal membaca posisi baca tersimpan:', e)
 }
 
 export function useLiterasi() {
@@ -154,6 +165,34 @@ export function useLiterasi() {
     }
   })
 
+  function getReadingPosition(bookId) {
+    return readingPositions.value.find((position) => position.id === bookId) || null
+  }
+
+  function saveReadingPosition(ebook, page) {
+    if (!ebook?.id) return
+    const savedPage = Math.max(1, Math.floor(Number(page) || 1))
+    const position = {
+      id: ebook.id,
+      judul: ebook.judul,
+      page: savedPage,
+      waktu: new Date().toISOString(),
+    }
+    const index = readingPositions.value.findIndex((item) => item.id === ebook.id)
+    if (index === -1) {
+      readingPositions.value.unshift(position)
+    } else {
+      readingPositions.value.splice(index, 1, position)
+    }
+    localStorage.setItem(KEY_READING_POSITIONS, JSON.stringify(readingPositions.value))
+  }
+
+  function removeReadingPosition(bookId) {
+    if (!bookId) return
+    readingPositions.value = readingPositions.value.filter((position) => position.id !== bookId)
+    localStorage.setItem(KEY_READING_POSITIONS, JSON.stringify(readingPositions.value))
+  }
+
   return {
     studentName,
     studentNis,
@@ -172,5 +211,9 @@ export function useLiterasi() {
     bookmarkedEbooks,
     lastReadEbook,
     recordLastRead,
+    readingPositions,
+    getReadingPosition,
+    saveReadingPosition,
+    removeReadingPosition,
   }
 }
