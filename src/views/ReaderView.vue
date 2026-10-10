@@ -145,6 +145,12 @@ function saveCurrentPosition() {
   addingCurrentPosition.value = false
 }
 
+function confirmRemoveReadingPosition(position) {
+  if (window.confirm(`Hapus posisi baca untuk "${position.judul}"?`)) {
+    removeReadingPosition(position.id)
+  }
+}
+
 const zoomIn = () => (zoom.value = Math.min(3, +(zoom.value + 0.25).toFixed(2)))
 const zoomOut = () => (zoom.value = Math.max(0.5, +(zoom.value - 0.25).toFixed(2)))
 
@@ -207,14 +213,30 @@ onBeforeUnmount(() => {
           </div>
 
 
-          <button
-            type="button"
-            @click="showReadingPositions = true"
-            class="flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold transition hover:bg-white/20"
-          >
-            <i class="bi bi-bookmark-check"></i>
-            <span>Posisi baca</span>
-          </button>
+          <div class="flex shrink-0 items-center gap-1.5">
+            <button
+              type="button"
+              :aria-label="isBookmarked(ebook.id) ? 'Hapus dari bookmark' : 'Tambahkan ke bookmark'"
+              :title="isBookmarked(ebook.id) ? 'Hapus dari bookmark' : 'Tambahkan ke bookmark'"
+              @click="toggleBookmark(ebook.id)"
+              class="flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold transition hover:bg-white/20"
+            >
+              <i :class="isBookmarked(ebook.id) ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
+              <span>{{ isBookmarked(ebook.id) ? 'Tersimpan' : 'Bookmark' }}</span>
+            </button>
+            <button
+              type="button"
+              :aria-label="`Posisi baca, ${readingPositions.length} tersimpan`"
+              @click="showReadingPositions = true"
+              class="flex items-center gap-1.5 rounded-lg bg-amber-300 px-3 py-1.5 text-xs font-semibold text-[#4a1d1d] transition hover:bg-amber-400"
+            >
+              <i class="bi bi-bookmark-check"></i>
+              <span>Posisi baca</span>
+              <span class="rounded-full bg-amber-950 px-1.5 py-0.5  text-white text-[10px] leading-none">
+                {{ readingPositions.length }}
+              </span>
+            </button>
+          </div>
         </div>
 
         <div v-if="status === 'ready'" class="flex flex-wrap items-center justify-between gap-2">
@@ -367,7 +389,7 @@ onBeforeUnmount(() => {
               :aria-label="`Hapus catatan posisi baca ${position.judul}`"
               :title="`Hapus catatan ${position.judul}`"
               class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-stone-400 transition hover:bg-red-50 hover:text-red-600"
-              @click="removeReadingPosition(position.id)"
+              @click="confirmRemoveReadingPosition(position)"
             >
               <i class="bi bi-x-lg" aria-hidden="true"></i>
             </button>
