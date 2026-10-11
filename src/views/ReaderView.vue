@@ -255,35 +255,38 @@ onBeforeUnmount(() => {
     <!-- Toolbar -->
     <div class="sticky top-16 z-30 border-b border-[#4a1d1d]/20 bg-[#7F1D1D] text-amber-50 shadow-md">
       <div class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-2.5 text-sm">
-        <div class="flex min-w-0 items-center justify-between gap-3">
-          <div class="flex min-w-0 items-center gap-3">
-            <a :href="`#/buku/${encodeURIComponent(ebook.id)}`" class="shrink-0 rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20">← Kembali</a>
+        <div class="flex min-w-0 items-center justify-between gap-1 sm:gap-3">
+          <div class="flex min-w-0 flex-1 items-center gap-1.5 sm:gap-3">
+            <a :href="`#/buku/${encodeURIComponent(ebook.id)}`" aria-label="Kembali ke detail buku" class="shrink-0 rounded-lg bg-white/10 px-2 py-1.5 transition hover:bg-white/20 sm:px-3">
+              <i class="bi bi-arrow-left sm:hidden" aria-hidden="true"></i>
+              <span class="hidden sm:inline">← Kembali</span>
+            </a>
             <a href="#/koleksi" class="hidden shrink-0 rounded-lg px-3 py-1.5 transition hover:bg-white/10 sm:block">Koleksi</a>
-            <span class="font-display block max-w-[180px] truncate font-semibold md:max-w-none">
+            <span class="font-display block min-w-0 max-w-[110px] truncate font-semibold sm:max-w-[180px] md:max-w-none">
               {{ ebook.judul }}
             </span>
           </div>
 
 
-          <div class="flex shrink-0 items-center gap-1.5">
+          <div class="flex shrink-0 items-center justify-end gap-1 sm:gap-1.5">
             <button
               type="button"
               :aria-label="isBookmarked(ebook.id) ? 'Hapus dari bookmark' : 'Tambahkan ke bookmark'"
               :title="isBookmarked(ebook.id) ? 'Hapus dari bookmark' : 'Tambahkan ke bookmark'"
               @click="toggleBookmark(ebook.id)"
-              class="flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold transition hover:bg-white/20"
+              class="flex items-center gap-1.5 rounded-lg bg-white/10 px-2 py-1.5 text-xs font-semibold transition hover:bg-white/20 sm:px-3"
             >
               <i :class="isBookmarked(ebook.id) ? 'bi bi-bookmark-fill' : 'bi bi-bookmark'"></i>
-              <span>{{ isBookmarked(ebook.id) ? 'Tersimpan' : 'Bookmark' }}</span>
+              <span class="hidden sm:inline">{{ isBookmarked(ebook.id) ? 'Tersimpan' : 'Bookmark' }}</span>
             </button>
             <button
               type="button"
               :aria-label="`Posisi baca, ${readingPositions.length} tersimpan`"
               @click="showReadingPositions = true"
-              class="flex items-center gap-1.5 rounded-lg bg-amber-300 px-3 py-1.5 text-xs font-semibold text-[#4a1d1d] transition hover:bg-amber-400"
+              class="flex items-center gap-1.5 rounded-lg bg-amber-300 px-2 py-1.5 text-xs font-semibold text-[#4a1d1d] transition hover:bg-amber-400 sm:px-3"
             >
               <i class="bi bi-bookmark-check"></i>
-              <span>Posisi baca</span>
+              <span class="hidden sm:inline">Posisi baca</span>
               <span class="rounded-full bg-amber-950 px-1.5 py-0.5  text-white text-[10px] leading-none">
                 {{ readingPositions.length }}
               </span>
@@ -292,11 +295,11 @@ onBeforeUnmount(() => {
         </div>
 
         <div v-if="status === 'ready'" class="flex flex-wrap items-center justify-between gap-2">
-          <div class="flex items-center gap-2">
-            <span class="font-semibold">Zoom</span>
-            <button aria-label="Perkecil tampilan" class="rounded-lg bg-white/15 px-4 py-1.5 text-lg font-semibold transition hover:bg-white/25 disabled:opacity-40" :disabled="zoom <= 0.5" @click="zoomOut">−</button>
-            <span class="w-12 text-center font-semibold">{{ Math.round(zoom * 100) }}%</span>
-            <button aria-label="Perbesar tampilan" class="rounded-lg bg-white/15 px-4 py-1.5 text-lg font-semibold transition hover:bg-white/25 disabled:opacity-40" :disabled="zoom >= 3" @click="zoomIn">+</button>
+          <div class="flex items-center gap-1 sm:gap-2">
+            <span class="hidden font-semibold sm:inline">Zoom</span>
+            <button aria-label="Perkecil tampilan" class="rounded-lg bg-white/15 px-3 py-1.5 text-lg font-semibold transition hover:bg-white/25 disabled:opacity-40 sm:px-4" :disabled="zoom <= 0.5" @click="zoomOut">−</button>
+            <span class="w-10 text-center font-semibold sm:w-12">{{ Math.round(zoom * 100) }}%</span>
+            <button aria-label="Perbesar tampilan" class="rounded-lg bg-white/15 px-3 py-1.5 text-lg font-semibold transition hover:bg-white/25 disabled:opacity-40 sm:px-4" :disabled="zoom >= 3" @click="zoomIn">+</button>
           </div>
           <div class="flex items-center gap-2">
             <button aria-label="Halaman sebelumnya" class="rounded-lg bg-white/10 px-3 py-1.5 transition hover:bg-white/20 disabled:opacity-40" :disabled="page <= 1" @click="goTo(page - 1)">‹</button>
@@ -316,21 +319,21 @@ onBeforeUnmount(() => {
 
     <div
       v-if="showReadingPositions"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4"
       @click.self="showReadingPositions = false"
     >
       <section
         role="dialog"
         aria-modal="true"
         aria-labelledby="reading-position-title"
-        class="max-h-[85vh] w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl"
+        class="flex max-h-[calc(100dvh-1.5rem)] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-2xl sm:max-h-[85vh]"
       >
-        <div class="flex items-start justify-between gap-4 border-b border-stone-200 px-5 py-4">
+        <div class="flex shrink-0 items-start justify-between gap-3 border-b border-stone-200 px-4 py-3 sm:gap-4 sm:px-5 sm:py-4">
           <div>
-            <h2 id="reading-position-title" class="font-display text-lg font-bold text-[#4a1d1d]">
-              Posisi baca tersimpan
+            <h2 id="reading-position-title" class="font-display text-base font-bold text-[#4a1d1d] sm:text-lg">
+              Posisi baca<span class="hidden sm:inline"> tersimpan</span>
             </h2>
-            <p class="mt-1 text-sm text-stone-500">
+            <p class="mt-1  text-sm text-stone-500 ">
               Nomor halaman menunjukkan halaman terakhir yang dibaca. Edit angkanya atau gunakan +/−.
             </p>
           </div>
@@ -342,21 +345,21 @@ onBeforeUnmount(() => {
           >×</button>
         </div>
 
-        <div class="max-h-[60vh] space-y-2 overflow-y-auto p-4">
+        <div class="min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain p-3 sm:p-4">
           <div
             v-if="!hasCurrentPosition"
             class="rounded-xl border border-amber-300 bg-amber-50 p-4"
           >
             <p class="font-semibold text-stone-800">{{ ebook.judul }}</p>
-            <p class="mt-1 text-sm text-stone-600">
+            <p class="mt-1 hidden text-sm text-stone-600 sm:block">
               Buku ini belum ada di catatan posisi baca. Mau ditambahkan?
             </p>
             <div v-if="addingCurrentPosition" class="mt-3 flex flex-wrap items-center gap-2">
               <div class="flex flex-col">
-                <label for="new-reading-page" class="text-sm font-medium text-stone-700">
+                <label for="new-reading-page" class="sr-only text-sm font-medium text-stone-700 sm:not-sr-only">
                   Halaman terakhir dibaca
                 </label>
-                <span class="text-xs text-stone-500">Contoh: 12</span>
+                <span class="hidden text-xs text-stone-500 sm:inline">Contoh: 12</span>
               </div>
               <input
                 id="new-reading-page"
@@ -369,14 +372,16 @@ onBeforeUnmount(() => {
               />
               <button
                 type="button"
+                aria-label="Simpan posisi baca"
                 class="rounded-lg bg-[#7F1D1D] px-3 py-2 text-sm font-semibold text-white hover:bg-[#681818]"
                 @click="saveCurrentPosition"
-              >Simpan</button>
+              ><i class="bi bi-check-lg sm:hidden" aria-hidden="true"></i><span class="hidden sm:inline">Simpan</span></button>
               <button
                 type="button"
+                aria-label="Batal menambahkan posisi baca"
                 class="rounded-lg px-3 py-2 text-sm font-medium text-stone-600 hover:bg-amber-100"
                 @click="addingCurrentPosition = false"
-              >Batal</button>
+              ><i class="bi bi-x-lg sm:hidden" aria-hidden="true"></i><span class="hidden sm:inline">Batal</span></button>
             </div>
             <button
               v-else
@@ -389,7 +394,7 @@ onBeforeUnmount(() => {
           <div
             v-for="position in readingPositions"
             :key="position.id"
-            class="flex items-center gap-3 rounded-xl border p-3"
+            class="flex items-center gap-2 rounded-xl border p-2.5 sm:gap-3 sm:p-3"
             :class="position.id === ebook.id
               ? 'border-amber-400 bg-amber-50'
               : 'border-stone-200 bg-white'"
@@ -398,7 +403,7 @@ onBeforeUnmount(() => {
               <span class="block truncate font-semibold text-stone-800">{{ position.judul }}</span>
               <span
                 v-if="position.id === ebook.id"
-                class="mt-0.5 block text-xs font-medium text-amber-800"
+                class="mt-0.5 hidden text-xs font-medium text-amber-800 sm:block"
               >Sedang dibaca · nomor halaman bisa diedit</span>
             </div>
             <div v-if="position.id === ebook.id" class="flex shrink-0 items-center gap-1.5">
@@ -411,7 +416,7 @@ onBeforeUnmount(() => {
               >−</button>
               <div class="flex flex-col items-center">
                 <label
-                  class="text-[10px] leading-tight text-stone-500"
+                  class="sr-only text-[10px] leading-tight text-stone-500 sm:not-sr-only"
                   :for="`saved-page-${position.id}`"
                 >Halaman terakhir</label>
                 <input
@@ -434,8 +439,8 @@ onBeforeUnmount(() => {
             </div>
             <span
               v-else
-              class="shrink-0 rounded-lg bg-stone-100 px-3 py-2 text-sm font-semibold text-stone-600"
-            >Hal. {{ position.page }}</span>
+              class="shrink-0 rounded-lg bg-stone-100 px-2 py-2 text-sm font-semibold text-stone-600 sm:px-3"
+            ><span class="hidden sm:inline">Hal. </span>{{ position.page }}</span>
             <button
               type="button"
               :aria-label="`Hapus catatan posisi baca ${position.judul}`"
